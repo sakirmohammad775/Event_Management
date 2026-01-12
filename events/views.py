@@ -8,5 +8,3 @@ def home(request):
 def contact(request):
     return HttpResponse('welcome to the contact page')
 
-def show_task(request):
-    return HttpResponse('hello')
