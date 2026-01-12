@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.shortcuts import render
 
 # Create your views here.
 def home(request):
@@ -7,4 +8,8 @@ def home(request):
 
 def contact(request):
     return HttpResponse('welcome to the contact page')
+
+def dashboard(request):
+    return render(request, 'dashboard.html')
+
 
