@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Event List</title>
+</head>
+<body>
+
+<h2>All Events</h2>
+
+<a href="{% url 'event_create' %}">Create New Event</a>
+<hr>
+
+{% for event in events %}
+    <div style="border:1px solid #ccc; padding:10px; margin-bottom:10px;">
+        <h3>{{ event.name }}</h3>
+
+        <p><strong>Category:</strong> {{ event.category.name }}</p>
+        <p><strong>Date:</strong> {{ event.date }}</p>
+        <p><strong>Time:</strong> {{ event.time }}</p>
+        <p><strong>Location:</strong> {{ event.location }}</p>
+
+        <p>
+            <strong>Participants ({{ event.participants.count }}):</strong>
+            {% for participant in event.participants.all %}
+                {{ participant.name }}{% if not forloop.last %}, {% endif %}
+            {% empty %}
+                No participants
+            {% endfor %}
+        </p>
+
+        <a href="{% url 'event_update' event.id %}">Edit</a> |
+        <a href="{% url 'event_delete' event.id %}">Delete</a>
+    </div>
+{% empty %}
+    <p>No events available.</p>
+{% endfor %}
+
+</body>
+</html>
