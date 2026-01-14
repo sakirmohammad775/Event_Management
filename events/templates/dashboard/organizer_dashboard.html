@@ -1,0 +1,86 @@
+{% extends 'dashboard/dashboard.html' %}
+
+{% block title %}
+Organizer Dashboard
+{% endblock title %}
+{% block header_title %}Organizer Dashboard{% endblock %}
+
+{% block content %}
+
+<!-- ================= STATS GRID ================= -->
+<div class="grid grid-cols-4 gap-6 mb-8">
+
+    <a href="{% url 'organizer_dashboard' %}">
+        <div class="bg-white p-6 rounded-xl shadow-sm">
+            <h3 class="text-gray-500 text-sm mb-2">TOTAL EVENTS</h3>
+            <p class="text-3xl font-semibold">{{ total_events }}</p>
+        </div>
+    </a>
+
+    <a href="{% url 'organizer_dashboard' %}?filter=upcoming">
+        <div class="bg-white p-6 rounded-xl shadow-sm">
+            <h3 class="text-gray-500 text-sm mb-2">UPCOMING EVENTS</h3>
+            <p class="text-3xl font-semibold">{{ upcoming_events }}</p>
+        </div>
+    </a>
+
+    <a href="{% url 'organizer_dashboard' %}?filter=past">
+        <div class="bg-white p-6 rounded-xl shadow-sm">
+            <h3 class="text-gray-500 text-sm mb-2">PAST EVENTS</h3>
+            <p class="text-3xl font-semibold">{{ past_events }}</p>
+        </div>
+    </a>
+
+    <div class="bg-white p-6 rounded-xl shadow-sm">
+        <h3 class="text-gray-500 text-sm mb-2">TOTAL PARTICIPANTS</h3>
+        <p class="text-3xl font-semibold">{{ total_participants }}</p>
+    </div>
+
+</div>
+
+<!-- ================= TODAY'S EVENTS ================= -->
+<div class="bg-white rounded-xl shadow-sm mb-8">
+    <h3 class="p-4 font-semibold border-b">Today's Events</h3>
+
+    {% if todays_events %}
+        {% for event in todays_events %}
+            <div class="p-4 border-b">
+                <strong>{{ event.name }}</strong>
+                <span class="text-gray-500">({{ event.time }})</span><br>
+                <span class="text-sm text-gray-600">
+                    {{ event.location }} | {{ event.category.name }}
+                </span>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="p-4 text-gray-500">No events today.</p>
+    {% endif %}
+</div>
+
+<!-- ================= INTERACTIVE EVENT LIST ================= -->
+<div class="bg-white rounded-xl shadow-sm">
+    <h3 class="p-4 font-semibold border-b">
+        {% if filter_type == 'upcoming' %}
+            Upcoming Events
+        {% elif filter_type == 'past' %}
+            Past Events
+        {% else %}
+            All Events
+        {% endif %}
+    </h3>
+
+    {% for event in filtered_events %}
+        <div class="p-4 border-b">
+            <strong>{{ event.name }}</strong><br>
+            <span class="text-sm text-gray-500">
+                {{ event.date }} |
+                {{ event.category.name }} |
+                Participants: {{ event.participants.count }}
+            </span>
+        </div>
+    {% empty %}
+        <p class="p-4 text-gray-500">No events found.</p>
+    {% endfor %}
+</div>
+
+{% endblock content %}

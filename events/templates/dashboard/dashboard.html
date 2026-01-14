@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}
+        Dashboard
+        {% endblock title %}
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
+          rel="stylesheet">
+
+    <!-- Optional compiled CSS -->
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 p-6">
+
+<div class="max-w-[1400px] mx-auto">
+
+    <!-- ================= HEADER ================= -->
+    <header class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-semibold text-green-600">
+            {% block header_title %}
+            Dashboard
+            {% endblock header_title %}
+        </h1>
+
+        <div class="flex items-center gap-4">
+            <button class="p-2 rounded-full hover:bg-gray-200">
+                🔔
+            </button>
+            <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-semibold">
+                U
+            </div>
+        </div>
+    </header>
+
+    <!-- ================= MESSAGES ================= -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="mb-4 p-3 rounded
+                {% if message.tags == 'success' %}bg-green-500 text-white{% endif %}
+                {% if message.tags == 'error' %}bg-red-500 text-white{% endif %}
+            ">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <main>
+        {% block content %}
+        <!-- Child templates load here -->
+        {% endblock content %}
+    </main>
+
+</div>
+
+</body>
+</html>
