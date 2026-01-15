@@ -1,4 +1,13 @@
+{% load static %}
 <div class="border p-4 rounded shadow">
+    <div class="relative h-64">
+        <img src="{% if event.image %}{{ event.image.url }}{% else %}{% static 'images/default_card_image.jpg' %}{% endif %}"
+            alt="{{ event.name }}" class="w-full h-full object-cover">
+        <!-- Event Date -->
+        <div class="absolute bottom-4 left-4 bg-black/50 text-white px-3 py-1 rounded">
+            {{ event.date|date:"F d, Y" }}, {{ event.time|time:"h A" }}
+        </div>
+    </div>
     <h2 class="text-lg font-semibold">{{ event.name }}</h2>
     <p class="text-sm text-gray-500">{{ event.category.name }}</p>
     <p>{{ event.date }} | {{ event.location }}</p>

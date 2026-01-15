@@ -1,22 +1,33 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
 {% block content %}
-<div class="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-lg mt-10">
-    <h2 class="text-3xl font-bold mb-4">{{ event.name }}</h2>
-    <p class="text-gray-500 mb-2">{{ event.date|date:"F d, Y" }}, {{ event.time|time:"h:i A" }}</p>
-    <p class="text-gray-500 mb-2">Location: {{ event.location }}</p>
-    <p class="text-gray-500 mb-2">Category: {{ event.category.name }}</p>
-    <p class="mb-4">{{ event.description }}</p>
+<div class="max-w-4xl grid grid-cols-2 mx-auto p-6 bg-white rounded-xl shadow-lg mt-10">
+    <div>
+        <h2 class="text-3xl font-bold mb-4">{{ event.name }}</h2>
+        <p class="text-gray-500 mb-2">{{ event.date|date:"F d, Y" }}, {{ event.time|time:"h:i A" }}</p>
+        <p class="text-gray-500 mb-2">Location: {{ event.location }}</p>
+        <p class="text-gray-500 mb-2">Category: {{ event.category.name }}</p>
+        <p class="mb-4">{{ event.description }}</p>
 
-    <h3 class="text-xl font-semibold mb-2">Participants ({{ event.participants.count }})</h3>
-    <ul class="list-disc list-inside text-gray-700">
-        {% for participant in event.participants.all %}
-        <li>{{ participant.name }} ({{ participant.email }})</li>
-        {% endfor %}
-    </ul>
+        <h3 class="text-xl font-semibold mb-2">Participants ({{ event.participants.count }})</h3>
+        <ul class="list-disc list-inside text-gray-700">
+            {% for participant in event.participants.all %}
+            <li>{{ participant.name }} ({{ participant.email }})</li>
+            {% endfor %}
+        </ul>
 
-    <a href="{% url 'event_list' %}" class="mt-6 inline-block px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
-        Back to Events
-    </a>
+        <a href="{% url 'event_list' %}" class="mt-6 inline-block px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
+            Back to Events
+        </a>
+    </div>
+    <div class="relative h-64">
+        <img src="{% if event.image %}{{ event.image.url }}{% else %}{% static 'images/default_card_image.jpg' %}{% endif %}"
+            alt="{{ event.name }}" class="w-full h-full object-cover">
+        <!-- Event Date -->
+        <div class="absolute bottom-4 left-4 bg-black/50 text-white px-3 py-1 rounded">
+            {{ event.date|date:"F d, Y" }}, {{ event.time|time:"h A" }}
+        </div>
+    </div>
 </div>
 {% endblock %}
