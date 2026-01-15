@@ -12,14 +12,18 @@
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
 </head>
 
-<body class="lg-w-[1440px] mx-auto">
+<body class="bg-gray-50">
     {% include "core/navbar.html" %}
 
-    <main class="p-6">
-        {% block content %}{% endblock content %}
-    </main>
+    <!-- PAGE WRAPPER -->
+    <div class="max-w-[1440px] mx-auto px-4">
+        <main class="py-6">
+            {% block content %}{% endblock content %}
+        </main>
+    </div>
 
     {% include "core/footer.html" %}
 </body>
+
 
 </html>

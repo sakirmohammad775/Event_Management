@@ -93,20 +93,30 @@ def event_create(request):
     return render(request, "form.html", {"form": form})
 
 
-def event_update(request):
-    form = EventForm(request.POST or None)
+def event_update(request, pk):
+    event = get_object_or_404(Event, pk=pk)  # get the event
+
+    form = EventForm(request.POST or None, instance=event)
+    # instance=event → pre-fills form with existing data
     if form.is_valid():
         form.save()
-        return redirect("event_list")
-    return render(request, "event_list.html", {"form": form})
+        return redirect('event_list')
+    return render(request, 'form.html', {
+        'form': form,
+        'event': event
+    })
 
 
-def event_delete(request):
+def event_delete(request, pk):
     event = get_object_or_404(Event, pk=pk)
+
     if request.method == "POST":
         event.delete()
-        return redirect("event_list")
-    return render(request, "confirm_delete.html")
+        return redirect('event_list')
+
+    return render(request, 'confirm_delete.html', {
+        'event': event
+    })
 
 def event_detail(request, pk):
     event = get_object_or_404(Event, pk=pk)
@@ -117,7 +127,7 @@ def event_detail(request, pk):
 
 def participant_list(request):
     participants = Participant.objects.prefetch_related('events')
-    return render(request, 'participant_list.html', {'participants': participants})
+    return render(request, 'participants/participants_list.html', {'participants': participants})
 
 def participant_create(request):
     form = ParticipantForm(request.POST or None)
