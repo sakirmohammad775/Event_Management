@@ -1,0 +1,35 @@
+{% load static %}
+<section class="relative bg-gray-900 text-white">
+    <!-- Background Image -->
+    <div class="absolute inset-0">
+        <img src="{% static 'images/banner.jpg' %}" 
+             alt="Event Banner" 
+             class="w-full h-full object-cover brightness-75">
+    </div>
+
+    <!-- Content -->
+    <div class="relative max-w-7xl mx-auto px-6 py-32 text-center">
+        <!-- Heading -->
+        <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+            Manage Events Effortlessly
+        </h1>
+
+        <!-- Description -->
+        <p class="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto mb-10">
+            Create, organize, and manage events with participants and categories —
+            all in one simple and powerful platform.
+        </p>
+
+        <!-- Buttons -->
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <a href="/events/event_list/"
+               class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+                View Events
+            </a>
+            <a href="/events/create/"
+               class="border border-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-700 transition">
+                Create Event
+            </a>
+        </div>
+    </div>
+</section>

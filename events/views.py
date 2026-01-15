@@ -1,19 +1,8 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from events.models import Event, Category, Participant
 from events.forms import EventForm, CategoryForm, ParticipantForm
 from django.utils import timezone
-
-
-# Create your views here.
-def home(request):
-    return HttpResponse("welcome to the")
-
-
-def contact(request):
-    return HttpResponse("welcome to the contact page")
-
 
 def organizer_dashboard(request):
     today = timezone.localdate()
@@ -33,6 +22,16 @@ def organizer_dashboard(request):
     else:
         filtered_events = events
 
+    
+    # ===== SEARCH =====
+    search_query = request.GET.get('q')
+    if search_query:
+        filtered_events = filtered_events.filter(
+            name__icontains=search_query
+        ) | filtered_events.filter(
+            location__icontains=search_query
+        )
+        
     context = {
         'total_events': events.count(),
         'upcoming_events': events.filter(date__gt=today).count(),
@@ -109,6 +108,9 @@ def event_delete(request):
         return redirect("event_list")
     return render(request, "confirm_delete.html")
 
+def event_detail(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    return render(request, 'event_detail.html', {'event': event})
 
 #-----------Participant CRUD------#
 

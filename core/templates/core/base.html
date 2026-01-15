@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Management</title>
+    <!-- Compiled Tailwind CSS -->
+     <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+</head>
+
+<body class="lg-w-[1440px] mx-auto">
+    {% include "core/navbar.html" %}
+
+    <main class="p-6">
+        {% block content %}{% endblock content %}
+    </main>
+
+    {% include "core/footer.html" %}
+</body>
+
+</html>

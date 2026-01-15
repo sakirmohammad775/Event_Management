@@ -1,5 +1,5 @@
 from django.urls import path
-from events.views import event_create,event_list,category_list,category_create,category_delete,category_update,participant_create,participant_list,participant_delete,participant_update,event_delete,event_update,organizer_dashboard
+from events.views import event_detail, event_create,event_list,category_list,category_create,category_delete,category_update,participant_create,participant_list,participant_delete,participant_update,event_delete,event_update,organizer_dashboard
 
 urlpatterns = [
     path('dashboard/organizer/', organizer_dashboard, name='organizer_dashboard'),
@@ -12,6 +12,7 @@ urlpatterns = [
     path('create/', event_create, name='event_create'),
     path('<int:pk>/update/', event_update, name='event_update'),
     path('<int:pk>/delete/', event_delete, name='event_delete'),
+    path('<int:pk>/',event_detail, name='event_detail'),  # dynamic detail page
     
     # ----------- CATEGORY ----------
     path('categories/',category_list, name='category_list'),

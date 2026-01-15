@@ -1,0 +1,12 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+
+{% include "core/banner.html" %}
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+    {% for event in events %}
+    {% include "core/card.html" with event=event %}
+    {% endfor %}
+</div>
+
+{% endblock content %}

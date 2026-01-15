@@ -1,0 +1,22 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-lg mt-10">
+    <h2 class="text-3xl font-bold mb-4">{{ event.name }}</h2>
+    <p class="text-gray-500 mb-2">{{ event.date|date:"F d, Y" }}, {{ event.time|time:"h:i A" }}</p>
+    <p class="text-gray-500 mb-2">Location: {{ event.location }}</p>
+    <p class="text-gray-500 mb-2">Category: {{ event.category.name }}</p>
+    <p class="mb-4">{{ event.description }}</p>
+
+    <h3 class="text-xl font-semibold mb-2">Participants ({{ event.participants.count }})</h3>
+    <ul class="list-disc list-inside text-gray-700">
+        {% for participant in event.participants.all %}
+        <li>{{ participant.name }} ({{ participant.email }})</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'event_list' %}" class="mt-6 inline-block px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
+        Back to Events
+    </a>
+</div>
+{% endblock %}
