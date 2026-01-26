@@ -5,7 +5,7 @@ from users.forms import CustomRegistrationForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.tokens import default_token_generator
-
+from users.forms import loginForm
 
 # jbh234OINa!@
 # Create your views here.
