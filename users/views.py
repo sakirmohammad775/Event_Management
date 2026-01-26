@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect ,HttpResponse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from users.forms import CustomRegistrationForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
+from django.contrib.auth.tokens import default_token_generator
 
 
 # jbh234OINa!@
@@ -12,14 +13,19 @@ def sign_up(request):
     if request.method == "POST":
         form = CustomRegistrationForm(request.POST)
         if form.is_valid():
-            form.save()  # now password will be saved correctly
-            messages.success(request, "Account created successfully! Please log in.")
-            return redirect("home")
+            user=form.save(commit=False)
+            user.set_password(form.cleaned_data["password1"])
+            user.is_active=False
+            user.save() 
+            messages.success(
+                request, "A confirmation mail sent. Please check your email"
+            )
+            return redirect('signin')
     else:
         form = CustomRegistrationForm()
     return render(request, "users/signup.html", {"form": form})
 
-
+## signin problem
 def sign_in(request):
     if request.method == "POST":
         username = request.POST.get("username")
@@ -42,3 +48,16 @@ def sign_out(request):
         logout(request)
         messages.success(request, "You have successfully logged out.")
         return redirect("home")
+
+def activate_user(request,user_id,token):
+    try:
+        user=User.objects.get(id=user_id)
+        if default_token_generator.check_token(user,token):
+            user.is_active=True
+            user.save()
+            messages.success(request, "Your account has been activated. You can now sign in.")
+            return redirect('signin')
+        else:
+            return HttpResponse('Invalid Id or token')
+    except User.DoesNotExist:
+        return HttpResponse('User not found')
