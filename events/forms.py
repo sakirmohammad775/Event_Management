@@ -36,3 +36,46 @@ class ParticipantForm(forms.ModelForm):
                 "This email is already registered"
             )  # prevent duplicate email
         return email  # return valid email
+
+
+"""Mixing to apply"""
+
+
+class StyleFormMixin:
+    default_classes = "border border-gray-300 w-full p-3 rounded-lg shadow-sm focus:border-rose-500 focus:outline-none"
+
+    
+    """Using mixins widget"""
+
+    def __init__(self, *arg, **kwarg):
+        super().__init__(*arg, **kwarg)
+        self.apply_styled_widgets()
+
+
+    def apply_styled_widgets(self):
+        for field_name, field in self.fields.items():
+            if isinstance(field.widget, forms.TextInput):
+                field.widget.attrs.update(
+                    {
+                        "class": self.default_classes,
+                        "placeholder": f"Enter{field.label.lower()}",
+                    }
+                )
+            elif isinstance(field.widget, forms.Textarea):
+                field.widget.attrs.update(
+                    {
+                        "class": self.default_classes,
+                        "placeholder": f"Enter{field.label.lower()}",
+                        "rows": 5,
+                    }
+                )
+            elif isinstance(field.widget, forms.SelectDateWidget):
+                print("inside date")
+                field.widget.attrs.update(
+                    {
+                        "class": "border border-gray-300 p-3 rounded-lg shadow-sm focus:border-rose-500 focus:outline-none"
+                    }
+                )
+            elif isinstance(field.widget, forms.CheckboxSelectMultiple):
+                print("inside checkbox")
+                field.widget.attrs.update({"class": "space-y-2"})
