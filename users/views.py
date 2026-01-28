@@ -5,10 +5,25 @@ from users.forms import CustomRegistrationForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.tokens import default_token_generator
-from users.forms import loginForm
+from users.forms import loginForm,AssignRoleForm
+from django.contrib.auth.decorators import user_passes_test
 
 # jbh234OINa!@
 # Create your views here.
+
+
+def is_admin(user):
+    return user.is_authenticated and user.groups.filter(name='Admin').exists()
+
+def is_organizer(user):
+    return user.is_authenticated and user.groups.filter(name='Organizer').exists()
+
+def is_participant(user):
+    return user.is_authenticated and user.groups.filter(name='Participant').exists()
+
+
+
+
 def sign_up(request):
     if request.method == "POST":
         form = CustomRegistrationForm(request.POST)
@@ -61,3 +76,22 @@ def activate_user(request,user_id,token):
             return HttpResponse('Invalid Id or token')
     except User.DoesNotExist:
         return HttpResponse('User not found')
+    
+    
+def admin_dashboard(request):
+    return render(request,'admin/dashboard.html')
+
+### Assign_role
+def assign_role(request,user_id):
+    user=User.objects.get(id=user_id)
+    form=AssignRoleForm()
+    
+    if request.method=='POST':
+        form=AssignRoleForm(request.POST)
+        if form.is_valid():
+            role=form.cleaned_data.get("role")
+            user.groups.clear()
+            user.groups.add(role)
+            messages.success(request,f"User {user.username} has been assigned to the {role.name} role")
+            return redirect('admin-dashboard')
+    return render(request,'admin/assign_role.html',{"form":form})
