@@ -5,7 +5,7 @@ from users.forms import CustomRegistrationForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.tokens import default_token_generator
-from users.forms import loginForm,AssignRoleForm
+from users.forms import loginForm,AssignRoleForm,CreateGroupForm
 from django.contrib.auth.decorators import user_passes_test
 
 # jbh234OINa!@
@@ -96,3 +96,15 @@ def assign_role(request,user_id):
             messages.success(request,f"User {user.username} has been assigned to the {role.name} role")
             return redirect('admin-dashboard')
     return render(request,'admin/assign_role.html',{"form":form})
+
+##create group
+def create_group(request):
+    form=CreateGroupForm()
+    if request.method=="POST":
+        form=CreateGroupForm(request.POST)
+        
+        if form.is_valid():
+            group=form.save()
+            messages.success(request, f"Group {group.name} has been created successfully")
+            return redirect('create-group')
+    return render(request,'admin/create_group.html',{'form':form})
