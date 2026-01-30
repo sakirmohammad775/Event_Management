@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'events',
     'users',
     "debug_toolbar",
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

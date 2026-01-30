@@ -79,7 +79,8 @@ def activate_user(request,user_id,token):
     
     
 def admin_dashboard(request):
-    return render(request,'admin/dashboard.html')
+    users=User.objects.all()
+    return render(request,'admin/dashboard.html',{"users":users})
 
 ### Assign_role
 def assign_role(request,user_id):
