@@ -1,9 +1,8 @@
 from django import forms
-from events.models import Event, Category, Participant
-
+from events.models import Event, Category
 
 class CategoryForm(forms.ModelForm):
-    class meta:  # meta class tells django form settings
+    class Meta:  # meta class tells django form settings
         model = Category  # Which model this form is for
         fields = "__all__"  # use all fields from category model
 
@@ -22,20 +21,6 @@ class EventForm(forms.ModelForm):
             )  # stop invalid submission
         return name
 
-
-class ParticipantForm(forms.ModelForm):
-    class Meta:
-        model = Participant
-        fields = "__all__"
-
-    # custom validation for email field
-    def clean_email(self):
-        email = self.cleaned_data.get("email")  # Get email from form
-        if Participant.objects.filter(email=email).exists():
-            raise forms.ValidationError(
-                "This email is already registered"
-            )  # prevent duplicate email
-        return email  # return valid email
 
 
 """Mixing to apply"""
@@ -69,13 +54,17 @@ class StyleFormMixin:
                         "rows": 5,
                     }
                 )
-            elif isinstance(field.widget, forms.SelectDateWidget):
-                print("inside date")
-                field.widget.attrs.update(
-                    {
-                        "class": "border border-gray-300 p-3 rounded-lg shadow-sm focus:border-rose-500 focus:outline-none"
+            elif isinstance(field.widget, forms.DateInput):
+                field.widget.attrs.update({
+                    "class": self.default_classes,
+                    "type": "date"
                     }
                 )
-            elif isinstance(field.widget, forms.CheckboxSelectMultiple):
-                print("inside checkbox")
-                field.widget.attrs.update({"class": "space-y-2"})
+
+            elif isinstance(field.widget, forms.TimeInput):
+                field.widget.attrs.update({
+                    "class": self.default_classes,
+                    "type": "time"
+                })
+
+    

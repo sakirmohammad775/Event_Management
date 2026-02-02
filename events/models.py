@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Category(models.Model):
@@ -30,15 +30,15 @@ class Event(models.Model):
     def __str__(self):
         return self.name
 
-
-class Participant(models.Model):
-    # Participate details
-    name = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
-
-    # A participant can join many events
-    # An event can hav Many participants
-    events = models.ManyToManyField(Event, related_name="participants", blank=True)
+    asset = models.ImageField(
+        upload_to="events_asset", 
+        blank=True, null=True
+    )
+    participants =models.ManyToManyField(
+        User, 
+        related_name="rsvp_events",
+        blank = True
+    )
 
     def __str__(self):
         return self.name

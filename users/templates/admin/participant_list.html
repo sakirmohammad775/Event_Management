@@ -31,9 +31,9 @@
                     <td class="px-4 py-4 whitespace-nowrap">{{participant.first_name}} {{participant.last_name}}</td>
                     <td class="px-4 py-4 whitespace-nowrap">{{participant.email}}</td>
                     <td class="px-4 py-4 whitespace-nowrap">{{participant.id}}</td>
-                    <td class="px-4 py-4 whitespace-nowrap">{{participant.group_name}}</td>
+                    <td class="px-4 py-4 whitespace-nowrap">{{participant.groups.first.name}}</td>
                     <td class="px-4 py-4 whitespace-nowrap">
-                        <a href="{% url 'assign-role' user.id %}"
+                        <a href="{% url 'assign-role' participant.id %}"
                             class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
                             Change Role
                         </a>

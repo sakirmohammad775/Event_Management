@@ -1,9 +1,14 @@
 from django.shortcuts import render
 from django.shortcuts import render, redirect, get_object_or_404
-from events.models import Event, Category, Participant
-from events.forms import EventForm, CategoryForm, ParticipantForm
+from events.models import Event, Category
+from events.forms import EventForm, CategoryForm
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required,user_passes_test,permission_required
 
+def is_organizer(user):
+    return user.groups.filter(name='organizer'.exits())
+
+@user_passes_test(is_organizer,login_url='no-permission')
 def organizer_dashboard(request):
     today = timezone.localdate()
 
@@ -51,14 +56,12 @@ def category_list(request):
     categories = Category.objects.all()
     return render(request, "category_list.html", {"categories": categories})
 
-
 def category_create(request):
     form = CategoryForm(request.POST or None)
     if form.is_valid():
         form.save()
         return redirect("category_list")
     return render(request, "form.html", {"form": form})
-
 
 def category_update(request, pk):
     # category = get_object_or_404(Category, pk=pk)
@@ -67,7 +70,6 @@ def category_update(request, pk):
         form.save()
         return redirect("category_list")
     return render(request, "form.html", {"form": form})
-
 
 def category_delete(request, pk):
     category = get_object_or_404(Category, pk=pk)
@@ -84,14 +86,12 @@ def event_list(request):
     events = Event.objects.select_related("category")
     return render(request, "event_list.html", {"events": events})
 
-
 def event_create(request):
     form = EventForm(request.POST or None)
     if form.is_valid():
         form.save()
         return redirect("event_list")
     return render(request, "form.html", {"form": form})
-
 
 def event_update(request, pk):
     event = get_object_or_404(Event, pk=pk)  # get the event
@@ -105,7 +105,6 @@ def event_update(request, pk):
         'form': form,
         'event': event
     })
-
 
 def event_delete(request, pk):
     event = get_object_or_404(Event, pk=pk)
@@ -122,31 +121,4 @@ def event_detail(request, pk):
     event = get_object_or_404(Event, pk=pk)
     return render(request, 'event_detail.html', {'event': event})
 
-#-----------Participant CRUD------#
 
-
-def participant_list(request):
-    participants = Participant.objects.prefetch_related('events')
-    return render(request, 'participants/participants_list.html', {'participants': participants})
-
-def participant_create(request):
-    form = ParticipantForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-        return redirect('participant_list')
-    return render(request,'form.html', {'form': form})
-
-def participant_update(request, pk):
-    participant = get_object_or_404(Participant, pk=pk)
-    form = ParticipantForm(request.POST or None, instance=participant)
-    if form.is_valid():
-        form.save()
-        return redirect('participant_list')
-    return render(request, 'form.html', {'form': form})
-
-def participant_delete(request, pk):
-    participant = get_object_or_404(Participant, pk=pk)
-    if request.method == 'POST':
-        participant.delete()
-        return redirect('participant_list')
-    return render(request, 'confirm_delete.html')
