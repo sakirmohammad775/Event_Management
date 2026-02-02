@@ -4,9 +4,8 @@ from events.models import Event, Category
 from events.forms import EventForm, CategoryForm
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required,user_passes_test,permission_required
-
-def is_organizer(user):
-    return user.groups.filter(name='organizer'.exits())
+from users.views import is_organizer
+from django.contrib.auth.models import User, Group
 
 @user_passes_test(is_organizer,login_url='no-permission')
 def organizer_dashboard(request):
@@ -36,12 +35,18 @@ def organizer_dashboard(request):
         ) | filtered_events.filter(
             location__icontains=search_query
         )
+    # ===== PARTICIPANT COUNT =====
+    try:
+        participant_group = Group.objects.get(name="Participant")
+        total_participants = participant_group.user_set.count()
+    except Group.DoesNotExist:
+        total_participants = 0
         
     context = {
         'total_events': events.count(),
         'upcoming_events': events.filter(date__gt=today).count(),
         'past_events': events.filter(date__lt=today).count(),
-        'total_participants': Participant.objects.count(),
+        'total_participants': total_participants,
         'todays_events': events.filter(date=today),
         'filtered_events': filtered_events,
         'filter_type': filter_type,

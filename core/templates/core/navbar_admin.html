@@ -1,0 +1,14 @@
+<nav>
+    <ul>
+        <li><a href="{% url 'admin-dashboard' %}">Dashboard</a></li>
+        <li><a href="{% url 'participant-list' %}">Participants</a></li>
+        <li><a href="{% url 'group-list' %}">Groups</a></li>
+        <li><a href="{% url 'create-group' %}">Create Group</a></li>
+        <li>
+            <form method="post" action="{% url 'signout' %}">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+        </li>
+    </ul>
+</nav>

@@ -1,0 +1,13 @@
+<nav>
+    <ul>
+        <li><a href="{% url 'participant-dashboard' %}">Dashboard</a></li>
+        <li><a href="{% url 'event-list' %}">All Events</a></li>
+        <li><a href="{% url 'rsvp-events' %}">My RSVPs</a></li>
+        <li>
+            <form method="post" action="{% url 'signout' %}">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+        </li>
+    </ul>
+</nav>
