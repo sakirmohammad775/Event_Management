@@ -15,7 +15,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = False #True when development 
 
 ALLOWED_HOSTS =['*'] 
-CSRF_TRUSTED_ORIGINS=['https://*.onrender.com'] ## add .onrender.com
+CSRF_TRUSTED_ORIGINS=['https://*.onrender.com','http://127.0.0.1:8000'] ## add .onrender.com
 
 
 # Application definition
