@@ -7,17 +7,33 @@ from faker import Faker
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'event_management.settings')
 django.setup()
 
-from events.models import Event, Category, Participant
+from events.models import Event, Category
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 def populate_db():
     fake = Faker()
 
-    # -------- Create Categories (5) --------
+    # -------- Create Users (Participants) --------
+    users = []
+    for _ in range(random.randint(10, 12)):
+        user = User.objects.create_user(
+            username=fake.unique.user_name(),
+            email=fake.unique.email(),
+            password="12345678",
+            phone_number=f"01{random.randint(300000000, 999999999)}"
+        )
+        users.append(user)
+
+    print(f"Created {len(users)} users (participants)")
+
+    # -------- Create Categories (5-6) --------
     categories = []
-    for _ in range(5):
+    for _ in range(random.randint(5, 6)):
         category = Category.objects.create(
-            name=fake.word().capitalize(),
+            name=fake.unique.word().capitalize(),
             description=fake.sentence()
         )
         categories.append(category)
@@ -26,33 +42,24 @@ def populate_db():
 
     # -------- Create Events (20–25) --------
     events = []
-    for _ in range(random.randint(20, 25)):
+    for i in range(random.randint(7, 10)):
+        print(f"Creating event {i+1}...")   # 👈 ADD THIS
+
         event = Event.objects.create(
             name=fake.sentence(nb_words=3),
             description=fake.paragraph(),
-            date=fake.date_between(start_date='-30d', end_date='+30d'),
+            date=fake.date_between(start_date='-10d', end_date='+30d'),
             time=fake.time(),
             location=fake.city(),
-            category=random.choice(categories)
-        )
-        events.append(event)
+            category=random.choice(categories),
+    )
+
+        selected_users = random.sample(users, random.randint(2, min(6, len(users))))
+        event.participants.set(selected_users)
+
+        print(f"Event {i+1} created with participants")  # 👈 ADD THIS
 
     print(f"Created {len(events)} events")
-
-    # -------- Create Participants (20–30) --------
-    participants = []
-    for _ in range(random.randint(20, 30)):
-        participant = Participant.objects.create(
-            name=fake.name(),
-            email=fake.unique.email()
-        )
-        # Assign participant to 1–3 random events
-        participant.events.set(
-            random.sample(events, random.randint(1, 3))
-        )
-        participants.append(participant)
-
-    print(f"Created {len(participants)} participants")
 
     print("✅ Database populated successfully!")
 

@@ -1,0 +1,49 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+
+<div class="max-w-4xl mx-auto p-6">
+
+    <!-- Profile Card -->
+    <div class="bg-white shadow rounded-xl p-6 flex items-center gap-6">
+
+        <!-- Profile Image -->
+        <img src="{{ request.user.profile_picture.url }}"
+             class="w-24 h-24 rounded-full object-cover border">
+
+        <!-- Info -->
+        <div>
+            <h2 class="text-2xl font-bold">
+                {{ request.user.first_name }} {{ request.user.last_name }}
+            </h2>
+
+            <p class="text-gray-600">{{ request.user.email }}</p>
+            <p class="text-gray-600">{{ request.user.phone_number }}</p>
+
+            <!-- Role -->
+            <p class="mt-2 text-sm text-blue-600 font-semibold">
+                {% if request.user.groups.first %}
+                    {{ request.user.groups.first.name }}
+                {% else %}
+                    No Role
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="mt-6 flex gap-4">
+        <a href="{% url 'edit-profile' %}"
+           class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+            Edit Profile
+        </a>
+
+        <a href="{% url 'change-password' %}"
+           class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600">
+            Change Password
+        </a>
+    </div>
+
+</div>
+
+{% endblock %}

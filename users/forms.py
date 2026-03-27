@@ -1,10 +1,11 @@
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User, Group,Permission
+from django.contrib.auth.models import Group,Permission
 from django import forms
 import re
 from events.forms import StyleFormMixin
 from django.contrib.auth.forms import AuthenticationForm
-
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 class RegisterForm(UserCreationForm):
     class Meta:
@@ -112,3 +113,8 @@ class CreateGroupForm(StyleFormMixin,forms.ModelForm):
     class Meta:
         model=Group
         fields=['name','permissions']
+        
+class EditProfileForm(StyleFormMixin, forms.ModelForm):
+    class Meta:
+        model = get_user_model()
+        fields = ["first_name", "last_name", "email", "profile_picture", "phone_number"]

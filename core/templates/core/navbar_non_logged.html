@@ -1,7 +1,68 @@
-<nav>
-    <ul>
-        <li><a href="{% url 'home' %}">Home</a></li>
-        <li><a href="{% url 'signin' %}">Sign In</a></li>
-        <li><a href="{% url 'signup' %}">Sign Up</a></li>
-    </ul>
+<nav class="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
+
+        <!-- Logo -->
+        <a href="{% url 'home' %}" class="text-xl font-bold text-purple-600 flex items-center gap-2">
+            EventHub
+        </a>
+
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex items-center gap-6 text-sm font-medium text-gray-600">
+
+            <a href="{% url 'home' %}" class="hover:text-purple-600 transition">
+                Home
+            </a>
+
+            <a href="{% url 'event_list' %}" class="hover:text-purple-600 transition">
+                Events
+            </a>
+
+            <a href="{% url 'signin' %}" class="hover:text-purple-600 transition">
+                Sign In
+            </a>
+
+            <a href="{% url 'signup' %}"
+               class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition shadow-sm">
+                Sign Up
+            </a>
+
+        </div>
+
+        <!-- Mobile Button -->
+        <button id="guest-menu-btn" class="md:hidden text-gray-600">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="guest-mobile-menu"
+         class="hidden md:hidden bg-white border-t px-4 py-4 space-y-3 text-sm text-gray-700">
+
+        <a href="{% url 'home' %}" class="block hover:text-purple-600 transition">
+            Home
+        </a>
+
+        <a href="{% url 'event_list' %}" class="block hover:text-purple-600 transition">
+            Events
+        </a>
+
+        <a href="{% url 'signin' %}" class="block hover:text-purple-600 transition">
+            Sign In
+        </a>
+
+        <a href="{% url 'signup' %}"
+           class="block text-white bg-purple-600 px-3 py-2 rounded-lg text-center hover:bg-purple-700 transition">
+            Sign Up
+        </a>
+
+    </div>
 </nav>
+
+<script>
+    document.getElementById('guest-menu-btn').addEventListener('click', function() {
+        document.getElementById('guest-mobile-menu').classList.toggle('hidden');
+    });
+</script>

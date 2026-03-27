@@ -1,0 +1,120 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+
+<div class="max-w-[1400px] mx-auto px-4 py-8">
+
+    <!-- Header -->
+    <header class="flex justify-between items-center mb-8">
+        <h1 class="text-2xl font-semibold">
+            Welcome, {{ request.user.first_name|default:request.user.username }}
+        </h1>
+
+        <div class="flex items-center gap-4">
+            <!-- Profile Circle -->
+            <div class="w-10 h-10 bg-blue-500 rounded-full text-white flex items-center justify-center font-semibold">
+                {{ request.user.username|slice:":1"|upper }}
+            </div>
+        </div>
+    </header>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+
+        <!-- Total RSVP -->
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+            <h3 class="text-sm text-gray-500 mb-2">TOTAL RSVP EVENTS</h3>
+            <p class="text-3xl font-bold">
+                {{ rsvp_events.count }}
+            </p>
+        </div>
+
+        <!-- Upcoming -->
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+            <h3 class="text-sm text-gray-500 mb-2">UPCOMING EVENTS</h3>
+            <p class="text-3xl font-bold">
+                {{ rsvp_events|dictsort:"date"|length }}
+            </p>
+        </div>
+
+        <!-- Past -->
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+            <h3 class="text-sm text-gray-500 mb-2">PAST EVENTS</h3>
+            <p class="text-3xl font-bold">
+                {{ rsvp_events|length }}
+            </p>
+        </div>
+
+    </div>
+
+    <!-- RSVP Events -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+        <!-- Upcoming Events -->
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h2 class="text-xl font-bold mb-4">Your RSVP Events</h2>
+
+            {% if rsvp_events %}
+            <ul class="space-y-4">
+
+                {% for event in rsvp_events %}
+                <li class="flex justify-between items-center border-b pb-2">
+
+                    <div>
+                        <p class="font-semibold">{{ event.name }}</p>
+                        <p class="text-sm text-gray-500">
+                            {{ event.date }} | {{ event.location }}
+                        </p>
+                    </div>
+
+                    <span class="text-sm text-blue-600">
+                        {{ event.category.name }}
+                    </span>
+
+                </li>
+                {% endfor %}
+
+            </ul>
+            {% else %}
+            <p class="text-gray-500">No RSVP events yet.</p>
+            {% endif %}
+        </div>
+
+        <!-- Table View -->
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h2 class="text-xl font-bold mb-4">All RSVP Events</h2>
+
+            {% if rsvp_events %}
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="text-left text-gray-500">
+                        <th class="pb-2">EVENT</th>
+                        <th class="pb-2">CATEGORY</th>
+                        <th class="pb-2">DATE</th>
+                        <th class="pb-2">LOCATION</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for event in rsvp_events %}
+                    <tr class="border-t">
+                        <td class="py-2">{{ event.name }}</td>
+                        <td class="py-2">{{ event.category.name }}</td>
+                        <td class="py-2">{{ event.date }}</td>
+                        <td class="py-2">{{ event.location }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% else %}
+            <p class="text-gray-500">No data available.</p>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -5,5 +5,3 @@ def home(request):
     events = Event.objects.select_related('category').prefetch_related('participants')[:20]
     return render(request,'core/home.html',{"events":events})
 
-def no_permission(request):
-    return render(request,'no_permission.html')

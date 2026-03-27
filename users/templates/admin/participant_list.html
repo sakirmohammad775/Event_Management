@@ -1,3 +1,10 @@
+{% extends 'admin/admin_dashboard.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+
+
 <div class="container mx-auto p-6">
     <div class="overflow-x-auto">
         <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
@@ -25,7 +32,7 @@
             </thead>
             <tbody class="divide-y divide-gray-200">
 
-                {% for participant in users %}
+                {% for participant in participants %}
                 <tr class="hover:bg-gray-50">
                     <td class="px-4 py-4 whitespace-nowrap">{{forloop.counter}}</td>
                     <td class="px-4 py-4 whitespace-nowrap">{{participant.first_name}} {{participant.last_name}}</td>
@@ -44,3 +51,4 @@
         </table>
     </div>
 </div>
+{% endblock content %}

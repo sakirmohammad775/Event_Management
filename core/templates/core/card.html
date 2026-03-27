@@ -1,19 +1,50 @@
 {% load static %}
-<div class="border p-4 rounded shadow">
-    <div class="relative h-64">
-        <img src="{% if event.image %}{{ event.image.url }}{% else %}{% static 'images/default_card_image.jpg' %}{% endif %}"
-            alt="{{ event.name }}" class="w-full h-full object-cover">
-        <!-- Event Date -->
-        <div class="absolute bottom-4 left-4 bg-black/50 text-white px-3 py-1 rounded">
-            {{ event.date|date:"F d, Y" }}, {{ event.time|time:"h A" }}
+
+<div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden w-full">
+
+    <!-- Image -->
+    <div class="relative h-48 sm:h-52 md:h-56 lg:h-60">
+        <img
+            src="{% if event.image %}{{ event.image.url }}{% else %}{% static 'images/default_card_image.jpg' %}{% endif %}"
+            alt="{{ event.name }}"
+            class="w-full h-full object-cover"
+        >
+
+        <!-- Date Badge -->
+        <div class="absolute bottom-3 left-3 bg-black/60 text-white text-xs sm:text-sm px-3 py-1 rounded-lg backdrop-blur-sm">
+            {{ event.date|date:"F d, Y" }} • {{ event.time|time:"h A" }}
         </div>
     </div>
-    <h2 class="text-lg font-semibold">{{ event.name }}</h2>
-    <p class="text-sm text-gray-500">{{ event.category.name }}</p>
-    <p>{{ event.date }} | {{ event.location }}</p>
-    <p class="text-sm">Participants: {{ event.participants.count }}</p>
-    <a href="{% url 'event_detail' event.id %}"
-        class="inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200">
-        Details
-    </a>
+
+    <!-- Content -->
+    <div class="p-4 sm:p-5 space-y-2">
+
+        <!-- Title -->
+        <h2 class="text-base sm:text-lg md:text-xl font-semibold text-gray-800 truncate">
+            {{ event.name }}
+        </h2>
+
+        <!-- Category -->
+        <p class="text-sm sm:text-base text-blue-600 font-medium">
+            {{ event.category.name }}
+        </p>
+
+        <!-- Info -->
+        <p class="text-xs sm:text-sm text-gray-500">
+            📍 {{ event.location }}
+        </p>
+
+        <p class="text-xs sm:text-sm text-gray-600">
+            👥 {{ event.participants.count }} Participants
+        </p>
+
+        <!-- Button -->
+        <div class="pt-2">
+            <a href="{% url 'event_detail' event.id %}"
+               class="block w-full text-center bg-gradient-to-r from-white to-black text-white py-2 sm:py-2.5 rounded-lg font-medium text-sm sm:text-base hover:from-black hover:to-white transition">
+                View Details
+            </a>
+        </div>
+
+    </div>
 </div>
