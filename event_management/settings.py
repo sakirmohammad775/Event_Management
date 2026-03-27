@@ -98,7 +98,8 @@ AUTH_USER_MODEL = 'users.CustomUser'
 ### For render deployment
 
 DATABASES = {
-    'default': dj_database_url.config(default=config('DATABASE_URL'))
+    'default': dj_database_url.config(default='postgresql://event_management_database_d8j8_user:nuxkK0w9u2anxMAsHHDhlJGykila6SDQ@dpg-d73cq2idbo4c73dvcq2g-a.oregon-postgres.render.com/event_management_database_d8j8',
+    conn_max_age=600)
 }
 
 
