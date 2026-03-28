@@ -1,6 +1,9 @@
 from decouple import config
 from pathlib import Path
 import dj_database_url
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -13,7 +16,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False #True when development 
+DEBUG = True #True when development 
 
 ALLOWED_HOSTS =['*'] 
 CSRF_TRUSTED_ORIGINS=['https://*.onrender.com','http://127.0.0.1:8000'] ## add .onrender.com
@@ -33,6 +36,8 @@ INSTALLED_APPS = [
     'users',
     "debug_toolbar",
     'widget_tweaks',
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
@@ -138,6 +143,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
@@ -146,6 +152,17 @@ MEDIA_ROOT = BASE_DIR / 'media'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+### Cloudinary
+cloudinary.config(
+    cloud_name=config('CLOUDINARY_CLOUD_NAME'),
+    api_key=config('CLOUDINARY_API_KEY'),
+    api_secret=config('CLOUDINARY_API_SECRET')
+)
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = config('EMAIL_HOST')
