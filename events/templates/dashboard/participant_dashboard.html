@@ -1,120 +1,221 @@
 {% extends "core/base.html" %}
 
 {% block content %}
-
 <div class="max-w-[1400px] mx-auto px-4 py-8">
 
     <!-- Header -->
     <header class="flex justify-between items-center mb-8">
         <h1 class="text-2xl font-semibold">
-            Welcome, {{ request.user.first_name|default:request.user.username }}
+            Welcome, {{ request.user.first_name|default:request.user.username }} 👋
         </h1>
-
-        <div class="flex items-center gap-4">
-            <!-- Profile Circle -->
-            <div class="w-10 h-10 bg-blue-500 rounded-full text-white flex items-center justify-center font-semibold">
-                {{ request.user.username|slice:":1"|upper }}
-            </div>
+        <div class="w-10 h-10 bg-blue-500 rounded-full text-white flex items-center justify-center font-semibold">
+            {{ request.user.username|slice:":1"|upper }}
         </div>
     </header>
 
     <!-- Stats -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
 
-        <!-- Total RSVP -->
         <div class="bg-white rounded-xl p-6 shadow-sm">
             <h3 class="text-sm text-gray-500 mb-2">TOTAL RSVP EVENTS</h3>
-            <p class="text-3xl font-bold">
-                {{ rsvp_events.count }}
-            </p>
+            <p class="text-3xl font-bold" id="stat-total">{{ rsvp_events.count }}</p>
         </div>
 
-        <!-- Upcoming -->
         <div class="bg-white rounded-xl p-6 shadow-sm">
             <h3 class="text-sm text-gray-500 mb-2">UPCOMING EVENTS</h3>
-            <p class="text-3xl font-bold">
-                {{ rsvp_events|dictsort:"date"|length }}
-            </p>
+            <p class="text-3xl font-bold text-green-600" id="stat-upcoming">0</p>
         </div>
 
-        <!-- Past -->
         <div class="bg-white rounded-xl p-6 shadow-sm">
             <h3 class="text-sm text-gray-500 mb-2">PAST EVENTS</h3>
-            <p class="text-3xl font-bold">
-                {{ rsvp_events|length }}
-            </p>
+            <p class="text-3xl font-bold text-gray-400" id="stat-past">0</p>
         </div>
 
     </div>
 
-    <!-- RSVP Events -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <!-- Table -->
+    <div class="bg-white p-6 rounded-xl shadow">
+        <h2 class="text-xl font-bold mb-4">My RSVP'd Events</h2>
 
-        <!-- Upcoming Events -->
-        <div class="bg-white p-6 rounded-lg shadow">
-            <h2 class="text-xl font-bold mb-4">Your RSVP Events</h2>
-
-            {% if rsvp_events %}
-            <ul class="space-y-4">
-
+        {% if rsvp_events %}
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="text-left text-gray-400 text-xs uppercase tracking-wide border-b">
+                    <th class="pb-3">Event</th>
+                    <th class="pb-3">Category</th>
+                    <th class="pb-3">Date</th>
+                    <th class="pb-3">Location</th>
+                    <th class="pb-3">Status</th>
+                    <th class="pb-3">Action</th>
+                </tr>
+            </thead>
+            <tbody id="rsvp-table-body">
                 {% for event in rsvp_events %}
-                <li class="flex justify-between items-center border-b pb-2">
+                <tr class="border-t hover:bg-gray-50 transition event-row"
+                    data-date="{{ event.date|date:'Y-m-d' }}"
+                    data-event-id="{{ event.pk }}"
+                    id="row-{{ event.pk }}">
 
-                    <div>
-                        <p class="font-semibold">{{ event.name }}</p>
-                        <p class="text-sm text-gray-500">
-                            {{ event.date }} | {{ event.location }}
-                        </p>
-                    </div>
+                    <!-- Event Name -->
+                    <td class="py-3 font-medium text-gray-800">{{ event.name }}</td>
 
-                    <span class="text-sm text-blue-600">
-                        {{ event.category.name }}
-                    </span>
+                    <!-- Category -->
+                    <td class="py-3">
+                        <span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs rounded-full">
+                            {{ event.category.name }}
+                        </span>
+                    </td>
 
-                </li>
+                    <!-- Date -->
+                    <td class="py-3 text-gray-500">{{ event.date }}</td>
+
+                    <!-- Location -->
+                    <td class="py-3 text-gray-500">{{ event.location }}</td>
+
+                    <!-- Status dropdown -->
+                    <td class="py-3">
+                        <div class="relative inline-block status-cell">
+                            <button onclick="toggleDropdown(this)"
+                                    class="status-btn flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium border transition">
+                                <span class="status-label">--</span>
+                                <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+                            <div class="status-dropdown hidden absolute z-10 top-8 left-0 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden w-32">
+                                <button onclick="setStatus(this, 'upcoming')"
+                                        class="w-full text-left px-4 py-2 text-xs hover:bg-gray-50 text-green-700">
+                                    Upcoming
+                                </button>
+                                <button onclick="setStatus(this, 'past')"
+                                        class="w-full text-left px-4 py-2 text-xs hover:bg-gray-50 text-gray-500">
+                                    Past
+                                </button>
+                            </div>
+                        </div>
+                    </td>
+
+                    <!-- Cancel RSVP -->
+                    <td class="py-3">
+                        <form method="POST" action="{% url 'rsvp_event' event.pk %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="cancel">
+                            <button type="submit"
+                                    onclick="return confirm('Cancel RSVP for {{ event.name }}?')"
+                                    class="px-3 py-1.5 bg-red-500 text-white text-xs rounded-lg hover:bg-red-600 transition">
+                                Cancel RSVP
+                            </button>
+                        </form>
+                    </td>
+
+                </tr>
                 {% endfor %}
+            </tbody>
+        </table>
 
-            </ul>
-            {% else %}
-            <p class="text-gray-500">No RSVP events yet.</p>
-            {% endif %}
+        {% else %}
+        <div class="text-center py-16">
+            <div class="text-5xl mb-4">🎟️</div>
+            <p class="text-gray-400 mb-4">You haven't RSVP'd to any events yet.</p>
+            <a href="{% url 'event_list' %}"
+               class="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm">
+                Browse Events
+            </a>
         </div>
-
-        <!-- Table View -->
-        <div class="bg-white p-6 rounded-lg shadow">
-            <h2 class="text-xl font-bold mb-4">All RSVP Events</h2>
-
-            {% if rsvp_events %}
-            <table class="w-full text-sm">
-                <thead>
-                    <tr class="text-left text-gray-500">
-                        <th class="pb-2">EVENT</th>
-                        <th class="pb-2">CATEGORY</th>
-                        <th class="pb-2">DATE</th>
-                        <th class="pb-2">LOCATION</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {% for event in rsvp_events %}
-                    <tr class="border-t">
-                        <td class="py-2">{{ event.name }}</td>
-                        <td class="py-2">{{ event.category.name }}</td>
-                        <td class="py-2">{{ event.date }}</td>
-                        <td class="py-2">{{ event.location }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-
-            {% else %}
-            <p class="text-gray-500">No data available.</p>
-            {% endif %}
-
-        </div>
-
+        {% endif %}
     </div>
 
 </div>
+
+<script>
+    // ── Auto-detect status from date on page load ──────────────────────────────
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    let upcomingCount = 0;
+    let pastCount = 0;
+
+    document.querySelectorAll('.event-row').forEach(row => {
+        const eventDate = new Date(row.dataset.date);
+        const btn = row.querySelector('.status-btn');
+        const label = row.querySelector('.status-label');
+
+        if (eventDate >= today) {
+            applyStatus(btn, label, 'upcoming');
+            upcomingCount++;
+        } else {
+            applyStatus(btn, label, 'past');
+            pastCount++;
+        }
+    });
+
+    document.getElementById('stat-upcoming').textContent = upcomingCount;
+    document.getElementById('stat-past').textContent = pastCount;
+
+    // ── Dropdown toggle ────────────────────────────────────────────────────────
+    function toggleDropdown(btn) {
+        const dropdown = btn.nextElementSibling;
+        // close all other open dropdowns first
+        document.querySelectorAll('.status-dropdown').forEach(d => {
+            if (d !== dropdown) d.classList.add('hidden');
+        });
+        dropdown.classList.toggle('hidden');
+    }
+
+    // close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.status-cell')) {
+            document.querySelectorAll('.status-dropdown').forEach(d => d.classList.add('hidden'));
+        }
+    });
+
+    // ── Set status from dropdown choice ───────────────────────────────────────
+    function setStatus(optionBtn, status) {
+        const cell = optionBtn.closest('.status-cell');
+        const btn = cell.querySelector('.status-btn');
+        const label = cell.querySelector('.status-label');
+
+        const row = optionBtn.closest('.event-row');
+        const oldStatus = row.dataset.currentStatus;
+
+        // update stat counters
+        if (oldStatus !== status) {
+            if (status === 'upcoming') {
+                upcomingCount++;
+                pastCount = Math.max(0, pastCount - 1);
+            } else {
+                pastCount++;
+                upcomingCount = Math.max(0, upcomingCount - 1);
+            }
+            document.getElementById('stat-upcoming').textContent = upcomingCount;
+            document.getElementById('stat-past').textContent = pastCount;
+        }
+
+        applyStatus(btn, label, status);
+        row.dataset.currentStatus = status;
+        cell.querySelector('.status-dropdown').classList.add('hidden');
+    }
+
+    // ── Apply visual styles to the status button ──────────────────────────────
+    function applyStatus(btn, label, status) {
+        btn.className = btn.className
+            .replace(/bg-\S+|text-\S+|border-\S+/g, '')
+            .trim();
+
+        if (status === 'upcoming') {
+            label.textContent = 'Upcoming';
+            btn.classList.add(
+                'bg-green-50', 'text-green-700', 'border-green-300'
+            );
+        } else {
+            label.textContent = 'Past';
+            btn.classList.add(
+                'bg-gray-100', 'text-gray-500', 'border-gray-300'
+            );
+        }
+
+        btn.closest('.event-row').dataset.currentStatus = status;
+    }
+</script>
 
 {% endblock %}

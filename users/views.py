@@ -73,6 +73,14 @@ class SignInView(View):
         username = request.POST.get("username")
         password = request.POST.get("password")
 
+        try:
+            u = User.objects.get(username=username)
+            if not u.is_active:
+                messages.error(request, "Account not activated. Please check your email.")
+                return render(request, "users/signin.html")
+        except User.DoesNotExist:
+            pass
+        
         user = authenticate(request, username=username, password=password)
 
         if user:
