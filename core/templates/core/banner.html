@@ -1,25 +1,22 @@
 {% load static %}
-<section class="relative bg-gray-900 text-white">
-    <!-- Background Image -->
-    <div class="absolute inset-0">
-        <img src="{% static 'images/banner_two.jpg' %}" 
-             alt="Event Banner" 
-             class="w-full h-full object-cover brightness-75">
-    </div>
+<section
+    class="relative min-h-[700px] w-full flex items-center justify-center text-white text-center bg-cover bg-center"
+    style="background-image: linear-gradient(rgba(45, 62, 80, 0.7), rgba(45, 62, 80, 0.7)), url('{% static 'images/banner_two.jpg' %}');">
 
-    <!-- Content -->
-    <div class="relative max-w-7xl mx-auto px-6 py-32 text-center">
-        <!-- Heading -->
-        <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-            Manage Events Effortlessly
+    <div class="max-w-4xl mx-auto px-4 pt-20">
+        <div class="mb-6 inline-block relative">
+
+        </div>
+
+        <p class="text-gray-300 text-lg md:text-xl font-light mb-2 tracking-wide">15 October at 20:00 - 22:00</p>
+        <h1 class="text-4xl md:text-7xl font-black uppercase tracking-tighter mb-10 leading-none">
+            PHP Conference <br> in Manhattan
         </h1>
-
-        <!-- Description -->
-        <p class="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto mb-10">
-            Create, organize, and manage events with participants and categories —
-            all in one simple and powerful platform.
-        </p>
-
-        
+        <div>
+            <a href="#"
+                class="bg-[#f05555] hover:bg-white hover:text-[#f05555] text-white px-12 py-4 rounded-lg font-bold uppercase transition duration-300 shadow-lg">
+                Explore Now
+            </a> 
+        </div>
     </div>
 </section>

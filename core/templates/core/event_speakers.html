@@ -1,0 +1,96 @@
+{% load static %}
+
+<section class="py-16 bg-black">
+    <div class="max-w-7xl mx-auto px-4">
+        
+        <div class="flex items-center justify-between mb-12 border-b border-gray-200 pb-4">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-[#f05555] flex items-center justify-center rounded-lg rotate-45">
+                    <i class="fa-solid fa-user text-white -rotate-45 text-xl"></i>
+                </div>
+                <h2 class="text-2xl font-black text-gray-200 uppercase tracking-tighter">
+                    Event Speakers <span class="text-gray-400 font-light lowercase ml-2">/ meet with greaters</span>
+                </h2>
+            </div>
+            
+            <div class="flex gap-2">
+                <button class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-[#f05555] transition">
+                    <i class="fa-solid fa-chevron-left text-xs"></i>
+                </button>
+                <button class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-[#f05555] transition">
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+            
+            <div class="flex flex-col items-center text-center group">
+                <div class="mb-6 relative">
+                    <div class="w-48 h-48 bg-white clip-path-hexagon flex items-center justify-center shadow-lg group-hover:bg-[#f05555] transition duration-300 p-1">
+                        <div class="w-full h-full bg-gray-100 clip-path-hexagon overflow-hidden">
+                            <img src="{% static 'images/speaker-1.jpg' %}" alt="Michale Lee" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+                <h3 class="text-lg font-bold text-[#2D3E50] uppercase tracking-wide">Michale Lee</h3>
+                <p class="text-[#f05555] text-xs font-bold uppercase mt-1">Developer</p>
+                <p class="text-gray-400 text-sm mt-3 leading-relaxed max-w-[250px]">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed vel velit.
+                </p>
+            </div>
+
+            <div class="flex flex-col items-center text-center group">
+                <div class="mb-6 relative">
+                    <div class="w-48 h-48 bg-white clip-path-hexagon flex items-center justify-center shadow-lg group-hover:bg-[#f05555] transition duration-300 p-1">
+                        <div class="w-full h-full bg-gray-100 clip-path-hexagon overflow-hidden">
+                            <img src="{% static 'images/speaker-2.jpg' %}" alt="Jack Liavd" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+                <h3 class="text-lg font-bold text-[#2D3E50] uppercase tracking-wide">Jack Liavd</h3>
+                <p class="text-[#f05555] text-xs font-bold uppercase mt-1">Manager</p>
+                <p class="text-gray-400 text-sm mt-3 leading-relaxed max-w-[250px]">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed vel velit.
+                </p>
+            </div>
+
+            <div class="flex flex-col items-center text-center group">
+                <div class="mb-6 relative">
+                    <div class="w-48 h-48 bg-white clip-path-hexagon flex items-center justify-center shadow-lg group-hover:bg-[#f05555] transition duration-300 p-1">
+                        <div class="w-full h-full bg-gray-100 clip-path-hexagon overflow-hidden">
+                            <img src="{% static 'images/speaker-3.jpg' %}" alt="Jenyfe Loe" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+                <h3 class="text-lg font-bold text-[#2D3E50] uppercase tracking-wide">Jenyfe Loe</h3>
+                <p class="text-[#f05555] text-xs font-bold uppercase mt-1">Manager</p>
+                <p class="text-gray-400 text-sm mt-3 leading-relaxed max-w-[250px]">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed vel velit.
+                </p>
+            </div>
+
+            <div class="flex flex-col items-center text-center group">
+                <div class="mb-6 relative">
+                    <div class="w-48 h-48 bg-white clip-path-hexagon flex items-center justify-center shadow-lg group-hover:bg-[#f05555] transition duration-300 p-1">
+                        <div class="w-full h-full bg-gray-100 clip-path-hexagon overflow-hidden">
+                            <img src="{% static 'images/speaker-4.jpg' %}" alt="Speaker Name" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+                <h3 class="text-lg font-bold text-[#2D3E50] uppercase tracking-wide">Speaker Name</h3>
+                <p class="text-[#f05555] text-xs font-bold uppercase mt-1">Manager</p>
+                <p class="text-gray-400 text-sm mt-3 leading-relaxed max-w-[250px]">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed vel velit.
+                </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<style>
+    .clip-path-hexagon {
+        clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+    }
+</style>

@@ -3,11 +3,22 @@
 {% block content %}
 
 {% include "core/banner.html" %}
+<div class="text-center my-12">
+    <h2 class="text-3xl md:text-4xl font-black text-gray-200 uppercase">Explore Our Event</h2>
+    <div class="w-20 h-1 bg-[#f05555] mx-auto mt-4"></div>
+    <p class="text-gray-500 mt-4 max-w-xl mx-auto text-sm md:text-base">
+        Choose the best plan for your event experience. Get early bird discounts now!
+    </p>
+</div>
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
     {% for event in events %}
     {% include "core/card.html" with event=event %}
     {% endfor %}
 </div>
 {% include "core/gallery_section.html" %}
+{% include "core/blog_section.html" %}
+{% include "core/event_speakers.html" %}
+{% include "core/pricing_section.html" %}
+
 
 {% endblock content %}

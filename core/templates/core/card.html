@@ -1,17 +1,15 @@
 {% load static %}
 
-<div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden w-full">
-
+<div class="bg-black rounded-2xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden w-full">
+    
     <!-- Image -->
     <div class="relative h-48 sm:h-52 md:h-56 lg:h-60">
-        <img
-            src="{% if event.image %}{{ event.image.url }}{% else %}{% static 'images/default_card_image.jpg' %}{% endif %}"
-            alt="{{ event.name }}"
-            class="w-full h-full object-cover"
-        >
+        <img src="{% if event.asset %}{{ event.asset.url }}{% elif event.image %}{{ event.image.url }}{% else %}{% static 'images/default_card_image.jpg' %}{% endif %}"
+            alt="{{ event.name }}" class="w-full h-full object-cover rounded-xl shadow-sm">
 
         <!-- Date Badge -->
-        <div class="absolute bottom-3 left-3 bg-black/60 text-white text-xs sm:text-sm px-3 py-1 rounded-lg backdrop-blur-sm">
+        <div
+            class="absolute bottom-3 left-3 bg-black/60 text-white text-xs sm:text-sm px-3 py-1 rounded-lg backdrop-blur-sm">
             {{ event.date|date:"F d, Y" }} • {{ event.time|time:"h A" }}
         </div>
     </div>
@@ -20,29 +18,32 @@
     <div class="p-4 sm:p-5 space-y-2">
 
         <!-- Title -->
-        <h2 class="text-base sm:text-lg md:text-xl font-semibold text-gray-800 truncate">
+        <h2 class="text-base sm:text-lg md:text-xl font-semibold text-gray-400 truncate">
             {{ event.name }}
         </h2>
 
         <!-- Category -->
-        <p class="text-sm sm:text-base text-blue-600 font-medium">
+        <p class="text-sm sm:text-base text-red-500 font-medium">
             {{ event.category.name }}
         </p>
 
         <!-- Info -->
         <p class="text-xs sm:text-sm text-gray-500">
-            📍 {{ event.location }}
+            {{ event.location }}
         </p>
 
         <p class="text-xs sm:text-sm text-gray-600">
-            👥 {{ event.participants.count }} Participants
+            {{ event.participants.count }} Participants
+        </p>
+        <p class="text-[#F05555] font-bold text-sm mt-2">
+            Tickets from  $42
         </p>
 
         <!-- Button -->
-        <div class="pt-2">
+        <div class="mt-3 sm:mt-0">
             <a href="{% url 'event_detail' event.id %}"
-               class="block w-full text-center bg-gradient-to-r from-white to-black text-white py-2 sm:py-2.5 rounded-lg font-medium text-sm sm:text-base hover:from-black hover:to-white transition">
-                View Details
+                class="inline-block px-3 py-1.5 border-2 border-gray-100 text-gray-400 text-[10px] font-bold rounded-lg uppercase tracking-widest hover:border-[#F05555] hover:text-[#F05555] transition-all duration-300">
+                Tickets & Details
             </a>
         </div>
 

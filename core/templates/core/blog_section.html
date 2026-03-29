@@ -1,0 +1,84 @@
+{% load static %}
+
+<section class="py-10 md:py-16 bg-black">
+    <div class="max-w-7xl mx-auto px-4">
+        
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-10 border-b border-gray-200 pb-6 gap-4">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 md:w-12 md:h-12 bg-[#f05555] flex items-center justify-center rounded-lg rotate-45 flex-shrink-0">
+                    <i class="fa-solid fa-file-lines text-white -rotate-45 text-lg md:text-xl"></i>
+                </div>
+                <h2 class="text-xl md:text-2xl font-black text-gray-200 uppercase tracking-tighter">
+                    Recent Blog Posts <span class="hidden xs:inline text-gray-400 font-light lowercase ml-1 md:ml-2">/ get news!</span>
+                </h2>
+            </div>
+            
+            <div class="flex gap-2 self-end sm:self-auto">
+                <button class="w-8 h-8 flex items-center justify-center border border-gray-300 text-gray-400 hover:bg-[#f05555] hover:text-white transition">
+                    <i class="fa-solid fa-chevron-left text-xs"></i>
+                </button>
+                <button class="w-8 h-8 flex items-center justify-center border border-gray-300 text-gray-400 hover:bg-[#f05555] hover:text-white transition">
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-6 lg:gap-8">
+            
+            <div class="group bg-white md:bg-transparent p-4 md:p-0 rounded-2xl md:rounded-none shadow-sm md:shadow-none">
+                <div class="overflow-hidden rounded-xl mb-4 aspect-video md:aspect-auto">
+                    <img src="{% static 'images/blog-post-1.jpg' %}" alt="Blog 1" class="w-full h-48 object-cover transition duration-500 group-hover:scale-110">
+                </div>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 hover:text-[#f05555] cursor-pointer transition line-clamp-2">
+                    Standard Blog Post Header Here
+                </h3>
+                <div class="flex flex-wrap items-center text-[10px] md:text-[11px] text-gray-500 gap-3 md:gap-4 mb-3 uppercase tracking-wider">
+                    <span>Sept 16, 2015</span>
+                    <span class="flex items-center gap-1"><i class="fa-solid fa-comment text-[#f05555]"></i> Comments Off</span>
+                </div>
+                <p class="text-sm text-gray-500 leading-relaxed line-clamp-3">
+                    Fusce pellentesque velvitae tincidunt egestas. Pellentesque habitant morbi tristique senectus et netus et malesuada ac turpis.
+                </p>
+            </div>
+
+            <div class="group bg-white md:bg-transparent p-4 md:p-0 rounded-2xl md:rounded-none shadow-sm md:shadow-none">
+                <div class="overflow-hidden rounded-xl mb-4 aspect-video md:aspect-auto">
+                    <img src="{% static 'images/blog-post-2.jpg' %}" alt="Blog 2" class="w-full h-48 object-cover transition duration-500 group-hover:scale-110">
+                </div>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 hover:text-[#f05555] cursor-pointer transition line-clamp-2">
+                    Event management wordpress theme
+                </h3>
+                <div class="flex flex-wrap items-center text-[10px] md:text-[11px] text-gray-500 gap-3 md:gap-4 mb-3 uppercase tracking-wider">
+                    <span>Sept 21, 2015</span>
+                    <span class="flex items-center gap-1"><i class="fa-solid fa-comment text-[#f05555]"></i> Comments Off</span>
+                </div>
+                <p class="text-sm text-gray-500 leading-relaxed line-clamp-3">
+                    Fusce pellentesque velvitae tincidunt egestas. Pellentesque habitant morbi tristique senectus et netus et malesuada ac turpis.
+                </p>
+            </div>
+
+            <div class="group bg-white md:bg-transparent p-4 md:p-0 rounded-2xl md:rounded-none shadow-sm md:shadow-none md:col-span-2 lg:col-span-1">
+                <div class="overflow-hidden rounded-xl mb-4 aspect-video md:aspect-auto">
+                    <img src="{% static 'images/blog-post-3.jpg' %}" alt="Blog 3" class="w-full h-48 object-cover transition duration-500 group-hover:scale-110">
+                </div>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 hover:text-[#f05555] cursor-pointer transition line-clamp-2">
+                    Gallery post format blog post
+                </h3>
+                <div class="flex flex-wrap items-center text-[10px] md:text-[11px] text-gray-500 gap-3 md:gap-4 mb-3 uppercase tracking-wider">
+                    <span>Sept 21, 2015</span>
+                    <span class="flex items-center gap-1"><i class="fa-solid fa-comment text-[#f05555]"></i> Comments Off</span>
+                </div>
+                <p class="text-sm text-gray-500 leading-relaxed line-clamp-3">
+                    Fusce pellentesque velvitae tincidunt egestas. Pellentesque habitant morbi tristique senectus et netus et malesuada ac turpis.
+                </p>
+            </div>
+
+        </div>
+
+        <div class="mt-12 flex justify-center">
+            <a href="#" class="w-full sm:w-auto justify-center bg-[#f05555] text-white px-8 py-4 md:py-3 rounded-lg font-bold uppercase text-sm flex items-center gap-2 hover:bg-gray-800 transition shadow-lg">
+                <i class="fa-solid fa-file-lines"></i> See all news
+            </a>
+        </div>
+    </div>
+</section>
