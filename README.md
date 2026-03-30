@@ -1,296 +1,161 @@
-# 🎉 Event Management System (Django + Tailwind)
+# EventHub — Event Management Platform
 
-A full-featured **Event Management Web Application** built with **Django (Backend)** and **Tailwind CSS (Frontend)**.
-This project supports **role-based access control**, **RSVP system**, **email activation**, and **user profile management**.
+A full-stack event management system built with Django and Tailwind CSS. Supports role-based access, RSVP workflows, email automation, and user profile management.
+---
+
+## Live Link : https://event-management-na8a.onrender.com/
+## Stack
+
+| Layer | Technology |
+|---|---|
+| Backend | Python 3.11 / Django 5.0 |
+| Frontend | Tailwind CSS |
+| Database | PostgreSQL (production) / SQLite3 (development) |
+| Auth | Custom AbstractUser model |
+| Automation | Django Signals |
 
 ---
 
-# 🚀 Features Overview
+## Features
 
-## 🔐 1. Authentication System
+### Authentication
+- Signup with email, first/last name, username
+- Email-based account activation via signed tokens
+- Login, logout, password change and reset
 
-* User Registration (Signup)
-* Login & Logout
-* Email-based Account Activation
-* Password Reset via Email
+### Role-Based Access Control
+Three roles managed through Django Groups:
 
----
+| Feature | Admin | Organizer | Participant |
+|---|:---:|:---:|:---:|
+| Manage users & roles | ✅ | ❌ | ❌ |
+| Create/edit events | ✅ | ✅ | ❌ |
+| View events | ✅ | ✅ | ✅ |
+| RSVP to events | ❌ | ❌ | ✅ |
 
-## 👥 2. Role-Based Access Control (RBAC)
+### Events
+- Full CRUD for events and categories (Organizer/Admin)
+- Event image upload with default image fallback
+- `select_related` and `prefetch_related` for optimised queries
 
-Using **Django Groups**, users are assigned roles:
+### RSVP System
+- One-click RSVP with duplicate prevention
+- Cancel RSVP from participant dashboard
+- ManyToMany relationship between `User` and `Event`
+- Confirmation email via Django Signals
 
-### 🛡️ Admin
+### Email Automation (Django Signals)
+- Activation email on signup (`post_save`)
+- RSVP confirmation on registration (`m2m_changed`)
 
-* Full system control
-* Manage users, roles, and groups
-* View all participants
-* Create/Delete groups
-* Assign roles
-
-### 🧑‍💼 Organizer
-
-* Create, update, delete:
-
-  * Events
-  * Categories
-* Access Organizer Dashboard
-
-### 👤 Participant
-
-* View events
-* RSVP to events
-* View personal RSVP list (Dashboard)
-
----
-
-## 📅 3. Event Management
-
-* Create Events (Organizer only)
-* Update/Delete Events
-* Category-based organization
-* Event Image support (with default image)
+### User Profiles
+- View and edit profile (name, avatar, phone number)
+- Change password
+- Email-based password reset
 
 ---
 
-## ✅ 4. RSVP System
-
-* Users can RSVP to events
-* Prevent duplicate RSVP
-* Cancel RSVP
-* ManyToMany relationship:
-
-  ```
-  User ↔ Event
-  ```
-* Confirmation email via Django Signals
-
----
-
-## 📧 5. Email System
-
-* Account activation email
-* RSVP confirmation email
-* Password reset email
-
----
-
-## 🔄 6. Django Signals
-
-Automated processes:
-
-* Send activation email after signup
-* Send RSVP confirmation email
-
----
-
-## 🧑‍💻 7. User Profile System
-
-* View Profile
-* Edit Profile:
-
-  * First Name
-  * Last Name
-  * Profile Picture
-  * Phone Number
-* Change Password
-* Reset Password via Email
-
----
-
-## 🧱 8. Custom User Model
-
-```python
-class CustomUser(AbstractUser):
-    profile_picture = models.ImageField(...)
-    phone_number = models.CharField(...)
-```
-
----
-
-## 📊 9. Dashboards
-
-### Admin Dashboard
-
-* Manage users
-* Assign roles
-* View participants
-
-### Organizer Dashboard
-
-* Event statistics
-* Manage events & categories
-
-### Participant Dashboard
-
-* View RSVP’d events
-
----
-
-# 🏗️ Project Structure
+## Project Structure
 
 ```
 event_management/
-│
-├── core/                  # Common views/templates
-├── events/                # Event & Category logic
-│   ├── models.py
-│   ├── views.py
-│   ├── urls.py
-│
-├── users/                 # Authentication & profile
-│   ├── models.py
-│   ├── views.py
-│   ├── urls.py
-│   ├── templates/
-│       ├── admin/
+├── core/               # Home page, base templates, navbar
+├── events/             # Event & category models, views, signals
+│   └── templates/
+│       ├── events/
+│       └── dashboard/
+├── users/              # Auth, profiles, admin management
+│   └── templates/
 │       ├── users/
-│
-├── templates/
-│   ├── base.html
-│   ├── navbar/
-│
-├── static/
-├── media/
-├── populate_db.py
+│       ├── admin/
+│       └── profile/
+├── media/              # Uploaded files
+├── static/             # CSS, JS, default images
+├── populate_db.py      # Seed script
+└── manage.py
 ```
 
 ---
 
-# ⚙️ Setup Instructions
-
-## 1️⃣ Clone Project
+## Setup
 
 ```bash
-git clone <repo-url>
-cd event_management
-```
+# 1. Clone and enter project
+git clone https://github.com/your-username/eventhub.git
+cd eventhub
 
-## 2️⃣ Create Virtual Environment
-
-```bash
+# 2. Create and activate virtual environment
 python -m venv event_env
 source event_env/Scripts/activate   # Windows
-```
+source event_env/bin/activate       # Mac/Linux
 
-## 3️⃣ Install Dependencies
-
-```bash
+# 3. Install dependencies
 pip install -r requirements.txt
-```
 
-## 4️⃣ Run Migrations
+# 4. Configure environment variables
+# Create a .env file in the project root:
+# SECRET_KEY=your-secret-key
+# DEBUG=True
+# EMAIL_HOST_USER=your@gmail.com
+# EMAIL_HOST_PASSWORD=yourgmailapppassword
+# FRONTEND_URL=http://localhost:8000
 
-```bash
+# 5. Run migrations
 python manage.py makemigrations
 python manage.py migrate
-```
 
-## 5️⃣ Create Superuser
-
-```bash
+# 6. Create superuser
 python manage.py createsuperuser
-```
 
-## 6️⃣ Run Server
+# 7. (Optional) Seed the database
+python populate_db.py
 
-```bash
+# 8. Start the server
 python manage.py runserver
 ```
 
 ---
 
-# 🧪 Populate Database (Optional)
+## Environment Variables
+
+| Key | Description |
+|---|---|
+| `SECRET_KEY` | Django secret key |
+| `DEBUG` | `True` for development, `False` for production |
+| `DATABASE_URL` | PostgreSQL URL (Render sets this automatically) |
+| `EMAIL_HOST_USER` | Gmail address |
+| `EMAIL_HOST_PASSWORD` | Gmail App Password (no spaces) |
+| `FRONTEND_URL` | Base URL for activation links |
+
+---
+
+## Deployment (Render)
 
 ```bash
-python populate_db.py
+# Build command
+./build.sh
+
+# Start command
+gunicorn event_management.wsgi:application
 ```
 
-Creates:
-
-* Categories (5–6)
-* Events (20–25)
-* Users (Participants)
+Set all environment variables in the Render dashboard. Add a PostgreSQL database and connect it via `DATABASE_URL`.
 
 ---
 
-# 🖼️ Media Configuration
+## Seed Data
 
-### settings.py
-
-```python
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-```
-
-### urls.py
-
-```python
-from django.conf import settings
-from django.conf.urls.static import static
-
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-```
+Running `python populate_db.py` creates:
+- 5 categories
+- 20+ events with images
+- Sample participant accounts
 
 ---
 
-# 🎨 Frontend
+## Author
 
-* Tailwind CSS
-* Responsive Design
-* Role-based dynamic navbar
-* Modern card UI
+**Sakir Mohammad Safayet** — Full-Stack Developer
 
 ---
 
-# 🔐 Permissions Logic
-
-| Feature       | Admin | Organizer | Participant |
-| ------------- | ----- | --------- | ----------- |
-| Manage Users  | ✅     | ❌         | ❌           |
-| Manage Events | ✅     | ✅         | ❌           |
-| View Events   | ✅     | ✅         | ✅           |
-| RSVP          | ❌     | ❌         | ✅           |
-
----
-
-# ⚠️ Important Notes
-
-* Use **CustomUser** instead of default User
-* Ensure **Groups exist**:
-
-  * Admin
-  * Organizer
-  * Participant
-* Email settings must be configured for activation/reset
-
----
-
-# 🔥 Future Improvements
-
-* Notification system 🔔
-* Event search & filters 🔍
-* Payment integration 💳
-* Real-time RSVP updates ⚡
-* REST API (DRF) 🌐
-
----
-
-# 👨‍💻 Author
-
-**Sakir Mohammad Safayet**
-
----
-
-# 💡 Conclusion
-
-This project demonstrates:
-
-* Full-stack Django development
-* Clean architecture
-* Role-based system design
-* Real-world features implementation
-
----
-
-⭐ If you like this project, give it a star!
+> Built as a demonstration of full-stack Django development, clean role-based architecture, and real-world feature implementation.
