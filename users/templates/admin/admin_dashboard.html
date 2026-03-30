@@ -1,113 +1,136 @@
 {% extends "core/base.html" %}
+{% load static %}
+
+{% block header_title %}Admin Console{% endblock header_title %}
 
 {% block content %}
+<div class="max-w-[1400px] mx-auto px-4 mt-20">
 
-<div class="max-w-[1400px] mx-auto px-4 py-8">
-
-    <!-- Header -->
-    <header class="flex justify-between items-center mb-8">
-        <h1 class="text-2xl font-semibold">Admin Dashboard</h1>
-
-        <div class="flex items-center gap-4">
-            <div class="w-10 h-10 bg-red-500 rounded-full text-white flex items-center justify-center font-semibold">
-                A
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        
+        <div class="bg-black rounded-[2rem] p-8 border border-white/5 shadow-xl hover:border-[#f05555]/30 transition-all duration-500 relative overflow-hidden group">
+            <div class="absolute -right-4 -top-4 w-20 h-20 bg-[#f05555]/5 rounded-full group-hover:bg-[#f05555]/10 transition-all"></div>
+            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 mb-2">Total Users</p>
+            <div class="flex items-baseline gap-2">
+                <span class="text-4xl font-black text-white tracking-tighter">{{ users.count }}</span>
+                <i class="fa-solid fa-users text-[#f05555] text-xs"></i>
             </div>
         </div>
-    </header>
 
-    <!-- Stats -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-
-        <div class="bg-white p-6 rounded-xl shadow-sm">
-            <h3 class="text-sm text-gray-500">TOTAL USERS</h3>
-            <p class="text-3xl font-bold">{{ users.count }}</p>
+        <div class="bg-black rounded-[2rem] p-8 border border-white/5 shadow-xl hover:border-[#f05555]/30 transition-all duration-500 relative overflow-hidden group">
+            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 mb-2">Admins</p>
+            <div class="flex items-baseline gap-2">
+                <span class="text-4xl font-black text-white tracking-tighter">{{ admins.count|default:"1" }}</span>
+                <i class="fa-solid fa-user-shield text-[#f05555] text-xs"></i>
+            </div>
         </div>
 
-        <div class="bg-white p-6 rounded-xl shadow-sm">
-            <h3 class="text-sm text-gray-500">ADMINS</h3>
-            <p class="text-3xl font-bold">
-                {{ users|dictsort:"groups"|length }}
-            </p>
+        <div class="bg-black rounded-[2rem] p-8 border border-white/5 shadow-xl hover:border-[#f05555]/30 transition-all duration-500 relative overflow-hidden group">
+            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 mb-2">Organizers</p>
+            <div class="flex items-baseline gap-2">
+                <span class="text-4xl font-black text-white tracking-tighter">{{ organizers.count|default:"0" }}</span>
+                <i class="fa-solid fa-calendar-check text-[#f05555] text-xs"></i>
+            </div>
         </div>
 
-        <div class="bg-white p-6 rounded-xl shadow-sm">
-            <h3 class="text-sm text-gray-500">ORGANIZERS</h3>
-            <p class="text-3xl font-bold">
-                {{ users|length }}
-            </p>
-        </div>
-
-        <div class="bg-white p-6 rounded-xl shadow-sm">
-            <h3 class="text-sm text-gray-500">PARTICIPANTS</h3>
-            <p class="text-3xl font-bold">
-                {{ users|length }}
-            </p>
+        <div class="bg-black rounded-[2rem] p-8 border border-white/5 shadow-xl hover:border-[#f05555]/30 transition-all duration-500 relative overflow-hidden group">
+            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 mb-2">Participants</p>
+            <div class="flex items-baseline gap-2">
+                <span class="text-4xl font-black text-white tracking-tighter">{{ participants.count|default:"0" }}</span>
+                <i class="fa-solid fa-ticket text-[#f05555] text-xs"></i>
+            </div>
         </div>
 
     </div>
 
-    <!-- Users Table -->
-    <div class="bg-white p-6 rounded-lg shadow mb-8">
-        <h2 class="text-xl font-bold mb-4">All Users</h2>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <div class="lg:col-span-2 bg-black rounded-[2.5rem] p-8 border border-white/10 shadow-2xl overflow-hidden">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-xl font-black text-white uppercase tracking-tighter">User Directory<span class="text-[#f05555]">.</span></h2>
+                <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest bg-white/5 px-3 py-1 rounded-full border border-white/5">
+                    Live Feed
+                </span>
+            </div>
 
-        <table class="w-full text-sm">
-            <thead>
-                <tr class="text-left text-gray-500 border-b">
-                    <th class="pb-2">Username</th>
-                    <th class="pb-2">Email</th>
-                    <th class="pb-2">Role</th>
-                    <th class="pb-2">Actions</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                {% for user in users %}
-                <tr class="border-t">
-
-                    <td class="py-2 font-medium">{{ user.username }}</td>
-                    <td class="py-2">{{ user.email }}</td>
-
-                    <td class="py-2">
-                        {% if user.groups.all %}
-                            {{ user.groups.all.0.name }}
-                        {% else %}
-                            No Role
-                        {% endif %}
-                    </td>
-
-                    <td class="py-2 flex gap-3">
-                        <a href="{% url 'assign-role' user.id %}"
-                           class="text-blue-600 hover:underline">
-                           Assign Role
-                        </a>
-                    </td>
-
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Groups Section -->
-    <div class="bg-white p-6 rounded-lg shadow">
-        <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-bold">Groups</h2>
-
-            <a href="{% url 'create-group' %}"
-               class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-                + Create Group
-            </a>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 border-b border-white/5">
+                            <th class="pb-4 pl-2">User</th>
+                            <th class="pb-4">Role</th>
+                            <th class="pb-4 text-right pr-2">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm">
+                        {% for user in users %}
+                        <tr class="group border-b border-white/5 hover:bg-white/[0.02] transition-colors">
+                            <td class="py-5 pl-2">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-neutral-800 to-neutral-950 flex items-center justify-center text-[10px] font-bold border border-white/10">
+                                        {{ user.username|first|upper }}
+                                    </div>
+                                    <div>
+                                        <p class="text-white font-bold tracking-tight">{{ user.username }}</p>
+                                        <p class="text-[11px] text-gray-500">{{ user.email }}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-5">
+                                <span class="text-[10px] font-black uppercase tracking-widest {% if user.is_superuser %}text-[#f05555]{% else %}text-gray-400{% endif %}">
+                                    {% if user.groups.all %}
+                                        {{ user.groups.all.0.name }}
+                                    {% else %}
+                                        No Role
+                                    {% endif %}
+                                </span>
+                            </td>
+                            <td class="py-5 text-right pr-2">
+                                <a href="{% url 'assign-role' user.id %}"
+                                   class="inline-block px-4 py-2 border border-white/10 text-[10px] font-black uppercase tracking-widest text-white rounded-xl hover:bg-[#f05555] hover:border-[#f05555] transition-all">
+                                    Assign
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        <ul class="space-y-2">
-            
-            <li class="flex justify-between border-b pb-2">
-                <span>{{ group.name }}</span>
-            </li>
-            
-        </ul>
-    </div>
+        <div class="space-y-6">
+            <div class="bg-black rounded-[2.5rem] p-8 border border-white/10 shadow-2xl">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-xl font-black text-white uppercase tracking-tighter">Groups</h2>
+                    <a href="{% url 'create-group' %}" class="w-8 h-8 bg-[#f05555] rounded-xl flex items-center justify-center text-white hover:bg-white hover:text-black transition-all">
+                        <i class="fa-solid fa-plus text-xs"></i>
+                    </a>
+                </div>
 
+                <div class="space-y-4">
+                    {% for group in groups %}
+                    <div class="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5 hover:border-[#f05555]/30 transition-all group">
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 rounded-full bg-[#f05555] group-hover:animate-pulse"></div>
+                            <span class="text-sm font-bold text-white tracking-tight uppercase">{{ group.name }}</span>
+                        </div>
+                        <span class="text-[10px] font-bold text-gray-500 uppercase">{{ group.user_set.count }} Users</span>
+                    </div>
+                    {% empty %}
+                    <p class="text-xs text-gray-500 italic text-center py-4">No groups defined yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="bg-[#f05555] rounded-[2.5rem] p-8 text-white relative overflow-hidden">
+                <i class="fa-solid fa-bolt absolute -right-4 -bottom-4 text-7xl text-black/10"></i>
+                <h3 class="text-lg font-black uppercase tracking-tighter mb-2 italic">Admin Tip</h3>
+                <p class="text-xs text-white/80 leading-relaxed font-medium">
+                    As an administrator, you have full control over permissions. Be careful when assigning the "Admin" role to other users.
+                </p>
+            </div>
+        </div>
+
+    </div>
 </div>
-
-{% endblock %}
+{% endblock content %}

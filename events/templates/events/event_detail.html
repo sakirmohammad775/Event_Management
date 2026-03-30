@@ -1,50 +1,93 @@
-{% extends 'core/base.html' %}
+{% extends "core/base.html" %}
 {% load static %}
 
+{% block header_title %}Event Details{% endblock header_title %}
+
 {% block content %}
-<div class="max-w-4xl grid grid-cols-2 mx-auto p-6 bg-white rounded-xl shadow-lg mt-10">
-    <div>
-        <h2 class="text-3xl font-bold mb-4">{{ event.name }}</h2>
-        <p class="text-gray-500 mb-2">{{ event.date|date:"F d, Y" }}, {{ event.time|time:"h:i A" }}</p>
-        <p class="text-gray-500 mb-2">Location: {{ event.location }}</p>
-        <p class="text-gray-500 mb-2">Category: {{ event.category.name }}</p>
-        <p class="mb-4">{{ event.description }}</p>
+<div class="max-w-6xl mx-auto mt-20">
+    <a href="{% url 'event_list' %}" class="inline-flex items-center text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 hover:text-[#f05555] transition-colors mb-8">
+        <i class="fa-solid fa-arrow-left mr-2"></i> Back to Exploration
+    </a>
 
-        <h3 class="text-xl font-semibold mb-2">Participants ({{ event.participants.count }})</h3>
-        <ul class="list-disc list-inside text-gray-700">
-            {% for participant in event.participants.all %}
-            <li>{{ participant.username }} ({{ participant.email }})</li>
-            {% endfor %}
-        </ul>
+    <div class="bg-black rounded-[3rem] border border-white/10 shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-2">
+        
+        <div class="p-8 md:p-12 space-y-8 relative">
+            <div class="absolute top-0 left-0 w-32 h-32 bg-[#f05555]/5 blur-[60px] rounded-full"></div>
 
-        <!-- RSVP Added -->
-        <form method="POST" action="{% url 'rsvp_event' event.id %}">
-            {% csrf_token %}
+            <div class="relative z-10">
+                <span class="px-3 py-1 bg-[#f05555]/10 border border-[#f05555]/20 text-[#f05555] text-[10px] font-black uppercase tracking-widest rounded-full">
+                    {{ event.category.name }}
+                </span>
+                <h2 class="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mt-4 leading-none">
+                    {{ event.name }}<span class="text-[#f05555]">.</span>
+                </h2>
+            </div>
 
-            {% if user_has_rsvp %}
-            <button name="action" value="cancel"
-                class="mt-6 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">
-                Cancel RSVP
-            </button>
-            {% else %}
-            <button name="action" value="add"
-                class="mt-6 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">
-                RSVP Now
-            </button>
-            {% endif %}
-        </form>
+            <div class="grid grid-cols-2 gap-6 py-6 border-y border-white/5 relative z-10">
+                <div class="space-y-1">
+                    <p class="text-[10px] font-black uppercase tracking-widest text-gray-500 italic">Timeline</p>
+                    <p class="text-sm text-gray-200 font-bold">{{ event.date|date:"F d, Y" }} @ {{ event.time|time:"h:i A" }}</p>
+                </div>
+                <div class="space-y-1">
+                    <p class="text-[10px] font-black uppercase tracking-widest text-gray-500 italic">Venue</p>
+                    <p class="text-sm text-gray-200 font-bold">{{ event.location }}</p>
+                </div>
+            </div>
 
-        <a href="{% url 'event_list' %}" class="mt-6 inline-block px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
-            Back to Events
-        </a>
-    </div>
-    <div class="relative h-64">
-        <img src="{% if event.image %}{{ event.image.url }}{% else %}{% static 'images/default_card_image.jpg' %}{% endif %}"
-            alt="{{ event.name }}" class="w-full h-full object-cover">
-        <!-- Event Date -->
-        <div class="absolute bottom-4 left-4 bg-black/50 text-white px-3 py-1 rounded">
-            {{ event.date|date:"F d, Y" }}, {{ event.time|time:"h A" }}
+            <div class="relative z-10">
+                <p class="text-gray-400 leading-relaxed text-sm">
+                    {{ event.description|default:"No detailed description provided for this event." }}
+                </p>
+            </div>
+
+            <div class="relative z-10 space-y-4">
+                <h3 class="text-xs font-black text-white uppercase tracking-[0.2em]">Confirmed Attendees ({{ event.participants.count }})</h3>
+                <div class="flex items-center -space-x-3 overflow-hidden">
+                    {% for participant in event.participants.all|slice:":5" %}
+                    <div class="inline-block h-10 w-10 rounded-full ring-4 ring-black bg-neutral-800 flex items-center justify-center text-[10px] font-bold text-white border border-white/10" title="{{ participant.username }}">
+                        {{ participant.username|first|upper }}
+                    </div>
+                    {% endfor %}
+                    {% if event.participants.count > 5 %}
+                    <div class="flex items-center justify-center h-10 w-10 rounded-full ring-4 ring-black bg-[#f05555] text-[10px] font-black text-white">
+                        +{{ event.participants.count|add:"-5" }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="pt-6 relative z-10">
+                <form method="POST" action="{% url 'rsvp_event' event.id %}">
+                    {% csrf_token %}
+                    {% if user_has_rsvp %}
+                        <button name="action" value="cancel"
+                            class="w-full md:w-auto px-10 py-4 bg-white/5 border border-white/10 text-white text-xs font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-red-600 hover:border-red-600 transition-all group">
+                            <i class="fa-solid fa-xmark mr-2 text-red-500 group-hover:text-white"></i> Cancel My Spot
+                        </button>
+                    {% else %}
+                        <button name="action" value="add"
+                            class="w-full md:w-auto px-10 py-4 bg-[#f05555] text-white text-xs font-black uppercase tracking-[0.2em] rounded-2xl hover:bg-white hover:text-black transition-all shadow-xl shadow-[#f05555]/20">
+                            <i class="fa-solid fa-bolt mr-2"></i> Confirm RSVP
+                        </button>
+                    {% endif %}
+                </form>
+            </div>
         </div>
+
+        <div class="relative h-80 lg:h-auto group">
+            <div class="absolute inset-0 bg-gradient-to-r from-black to-transparent z-10 hidden lg:block"></div>
+            <img src="{% if event.image %}{{ event.image.url }}{% else %}{% static 'images/default_card_image.jpg' %}{% endif %}"
+                alt="{{ event.name }}" 
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+            
+            <div class="absolute top-8 right-8 z-20">
+                <div class="bg-black/40 backdrop-blur-xl border border-white/20 p-4 rounded-3xl text-center min-w-[80px]">
+                    <p class="text-2xl font-black text-[#f05555] leading-none">{{ event.date|date:"d" }}</p>
+                    <p class="text-[10px] font-black uppercase text-white tracking-widest">{{ event.date|date:"M" }}</p>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
-{% endblock %}
+{% endblock content %}

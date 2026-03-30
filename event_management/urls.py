@@ -9,6 +9,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',home,name='home'), #it defines the core base home
+    path('', include('core.urls')),
     path('events/',include("events.urls")), ## it defines all tasks.url are included automatically
     path('users/', include('users.urls')),
 ]+ debug_toolbar_urls()

@@ -1,17 +1,63 @@
 {% extends "core/base.html" %}
+{% load static %}
+
+{% block header_title %}{% if form.instance.pk %}Edit Event{% else %}Create Event{% endif %}{% endblock header_title %}
 
 {% block content %}
-<h2 class="text-2xl font-bold mb-4">
-    Event
-</h2>
+<div class="max-w-3xl mx-auto mt-20">
+    <a href="{% url 'event_list' %}" class="inline-flex items-center text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-[#f05555] transition-colors mb-6">
+        <i class="fa-solid fa-arrow-left mr-2"></i> Back to Events
+    </a>
 
-<form method="POST" class="space-y-4">
-    {% csrf_token %}
-    {{ form.as_p }}
+    <div class="bg-black rounded-[2.5rem] p-8 md:p-12 border border-white/10 shadow-2xl relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-[#f05555]/10 blur-[50px] rounded-full"></div>
+        
+        <div class="relative z-10">
+            <h2 class="text-3xl font-black text-white uppercase tracking-tighter mb-8">
+                {% if form.instance.pk %}Update {% else %}New{% endif %} Event<span class="text-[#f05555]">.</span>
+            </h2>
 
-    <button type="submit"
-        class="px-4 py-2 bg-green-600 text-white rounded">
-        Save Changes
-    </button>
-</form>
-{% endblock %}
+            <form method="POST" enctype="multipart/form-data" class="space-y-6">
+                {% csrf_token %}
+
+                <div class="grid grid-cols-1 gap-6">
+                    {% for field in form %}
+                    <div class="space-y-2">
+                        <label class="text-[11px] font-black uppercase tracking-widest text-gray-400 ml-2">
+                            {{ field.label }}
+                        </label>
+                        
+                        <div class="relative">
+                            {% if field.name == 'description' or field.name == 'content' %}
+                                <textarea name="{{ field.name }}" id="{{ field.id_for_label }}" rows="4" 
+                                    class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:outline-none focus:border-[#f05555] focus:ring-1 focus:ring-[#f05555] transition-all text-white text-sm"
+                                >{{ field.value|default_if_none:"" }}</textarea>
+                            {% else %}
+                                <input type="{{ field.field.widget.input_type|default:'text' }}" 
+                                    name="{{ field.name }}" 
+                                    id="{{ field.id_for_label }}"
+                                    value="{{ field.value|default_if_none:'' }}"
+                                    class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:outline-none focus:border-[#f05555] focus:ring-1 focus:ring-[#f05555] transition-all text-white text-sm"
+                                    placeholder="Enter {{ field.label|lower }}..."
+                                >
+                            {% endif %}
+                        </div>
+
+                        {% if field.errors %}
+                            <p class="text-[#f05555] text-[10px] font-bold uppercase mt-1 ml-2">{{ field.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="pt-6">
+                    <button type="submit"
+                        class="w-full md:w-auto px-12 py-4 bg-[#f05555] text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-white hover:text-black transition-all shadow-lg shadow-[#f05555]/20">
+                        Save Event Details
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

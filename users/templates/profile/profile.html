@@ -1,49 +1,78 @@
 {% extends "core/base.html" %}
+{% load static %}
+
+{% block header_title %}My Profile{% endblock header_title %}
 
 {% block content %}
+<div class="max-w-4xl mx-auto mt-20">
+    
+    <div class="bg-black rounded-[2.5rem] p-8 md:p-12 border border-white/10 shadow-2xl relative overflow-hidden">
+        <div class="absolute -bottom-20 -left-20 w-64 h-64 bg-[#f05555]/5 blur-[80px] rounded-full"></div>
 
-<div class="max-w-4xl mx-auto p-6">
+        <div class="relative z-10 flex flex-col md:flex-row items-center gap-10">
+            
+            <div class="relative group">
+                <div class="absolute -inset-1 bg-gradient-to-tr from-[#f05555] to-red-900 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+                <img src="{{ request.user.profile_picture.url }}"
+                     alt="{{ request.user.username }}"
+                     class="relative w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-2 border-white/10 shadow-2xl">
+                
+                <div class="absolute bottom-2 right-2 w-6 h-6 bg-green-500 border-4 border-black rounded-full"></div>
+            </div>
 
-    <!-- Profile Card -->
-    <div class="bg-white shadow rounded-xl p-6 flex items-center gap-6">
+            <div class="text-center md:text-left flex-1 space-y-4">
+                <div>
+                    <span class="text-[10px] font-black uppercase tracking-[0.3em] text-[#f05555]">
+                        {% if request.user.groups.first %}
+                            {{ request.user.groups.first.name }}
+                        {% else %}
+                            Member
+                        {% endif %}
+                    </span>
+                    <h2 class="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter mt-1">
+                        {{ request.user.first_name }} {{ request.user.last_name }}<span class="text-[#f05555]">.</span>
+                    </h2>
+                </div>
 
-        <!-- Profile Image -->
-        <img src="{{ request.user.profile_picture.url }}"
-             class="w-24 h-24 rounded-full object-cover border">
+                <div class="space-y-2">
+                    <p class="flex items-center justify-center md:justify-start gap-3 text-gray-400 text-sm">
+                        <i class="fa-solid fa-envelope text-[#f05555]/60"></i>
+                        {{ request.user.email }}
+                    </p>
+                    <p class="flex items-center justify-center md:justify-start gap-3 text-gray-400 text-sm">
+                        <i class="fa-solid fa-phone text-[#f05555]/60"></i>
+                        {{ request.user.phone_number|default:"No phone linked" }}
+                    </p>
+                </div>
 
-        <!-- Info -->
-        <div>
-            <h2 class="text-2xl font-bold">
-                {{ request.user.first_name }} {{ request.user.last_name }}
-            </h2>
+                <div class="pt-6 flex flex-wrap justify-center md:justify-start gap-4">
+                    <a href="{% url 'edit-profile' %}"
+                       class="px-8 py-3 bg-[#f05555] text-white text-[11px] font-black rounded-xl uppercase tracking-widest hover:bg-white hover:text-black transition-all shadow-lg shadow-[#f05555]/20">
+                        <i class="fa-solid fa-user-pen mr-2"></i> Edit Profile
+                    </a>
 
-            <p class="text-gray-600">{{ request.user.email }}</p>
-            <p class="text-gray-600">{{ request.user.phone_number }}</p>
-
-            <!-- Role -->
-            <p class="mt-2 text-sm text-blue-600 font-semibold">
-                {% if request.user.groups.first %}
-                    {{ request.user.groups.first.name }}
-                {% else %}
-                    No Role
-                {% endif %}
-            </p>
+                    <a href="{% url 'change-password' %}"
+                       class="px-8 py-3 bg-white/5 border border-white/10 text-white text-[11px] font-black rounded-xl uppercase tracking-widest hover:bg-white hover:text-black transition-all">
+                        <i class="fa-solid fa-key mr-2"></i> Change Password
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Actions -->
-    <div class="mt-6 flex gap-4">
-        <a href="{% url 'edit-profile' %}"
-           class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-            Edit Profile
-        </a>
-
-        <a href="{% url 'change-password' %}"
-           class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600">
-            Change Password
-        </a>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+        <div class="bg-black/40 backdrop-blur-md border border-white/5 p-6 rounded-[2rem]">
+            <p class="text-gray-500 text-[10px] font-black uppercase tracking-widest mb-1">Total Events</p>
+            <h4 class="text-2xl font-bold text-white">{{ events.count|default:"0" }}</h4>
+        </div>
+        <div class="bg-black/40 backdrop-blur-md border border-white/5 p-6 rounded-[2rem]">
+            <p class="text-gray-500 text-[10px] font-black uppercase tracking-widest mb-1">Account Status</p>
+            <h4 class="text-2xl font-bold text-green-500">Active</h4>
+        </div>
+        <div class="bg-black/40 backdrop-blur-md border border-white/5 p-6 rounded-[2rem]">
+            <p class="text-gray-500 text-[10px] font-black uppercase tracking-widest mb-1">Member Since</p>
+            <h4 class="text-white font-bold">{{ request.user.date_joined|date:"M Y" }}</h4>
+        </div>
     </div>
-
 </div>
-
-{% endblock %}
+{% endblock content %}

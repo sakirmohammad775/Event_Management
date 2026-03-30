@@ -1,78 +1,92 @@
 {% extends "core/base.html" %}
 {% load static %}
 
-{% block title %}All Events{% endblock %}
+{% block header_title %}All Events{% endblock header_title %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto">
+<div class="max-w-7xl mx-auto mt-20">
 
-    <!-- ===== HEADER ===== -->
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
-        <h2 class="text-2xl font-bold text-gray-800">All Events</h2>
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-10">
+        <div>
+            <h2 class="text-2xl font-black text-gray-200 uppercase tracking-tighter">Event Management</h2>
+            <p class="text-sm text-gray-500">View and organize all your upcoming events.</p>
+        </div>
 
         <a href="{% url 'event_create' %}"
-           class="mt-4 md:mt-0 inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
-            ➕ Create Event
+           class="mt-4 md:mt-0 inline-flex items-center gap-2 px-6 py-3 bg-[#f05555] text-white text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-black transition-all shadow-lg shadow-[#f05555]/20">
+            <i class="fa-solid fa-plus"></i> Create Event
         </a>
     </div>
 
-    <!-- ===== EVENTS GRID ===== -->
     {% if events %}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 
         {% for event in events %}
-        <div class="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden">
+        <div class="group bg-black rounded-[2rem] shadow-md hover:shadow-2xl transition-all duration-500 overflow-hidden w-full border border-white/5">
 
-            <!-- Image -->
-            <div class="h-40 bg-gray-200 flex items-center justify-center">
-                <span class="text-gray-500 text-sm">Event Image</span>
+            <div class="relative h-48 sm:h-52 md:h-56 lg:h-60 overflow-hidden">
+                <img src="{% if event.asset %}{{ event.asset.url }}{% elif event.image %}{{ event.image.url }}{% else %}{% static 'images/default_card_image.jpg' %}{% endif %}"
+                    alt="{{ event.name }}" 
+                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+
+                <div class="absolute bottom-4 left-4 bg-black/70 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-lg backdrop-blur-md border border-white/10">
+                    <i class="fa-regular fa-calendar-check mr-1 text-[#f05555]"></i>
+                    {{ event.date|date:"M d, Y" }} • {{ event.time|time:"h A" }}
+                </div>
+                
+                <div class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <a href="{% url 'event_update' event.id %}" class="w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-yellow-500 transition-colors">
+                        <i class="fa-solid fa-pen-to-square text-xs"></i>
+                    </a>
+                    <form action="{% url 'event_delete' event.id %}" method="POST" onsubmit="return confirm('Delete this event?')">
+                        {% csrf_token %}
+                        <button type="submit" class="w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-[#f05555] transition-colors">
+                            <i class="fa-solid fa-trash-can text-xs"></i>
+                        </button>
+                    </form>
+                </div>
             </div>
 
-            <!-- Content -->
-            <div class="p-5">
-                <h3 class="text-lg font-semibold text-gray-800 mb-2">
-                    {{ event.name }}
-                </h3>
+            <div class="p-6 space-y-3">
 
-                <p class="text-sm text-gray-600 mb-1">
-                    📂 <span class="font-medium">Category:</span>
+                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-[#f05555]">
                     {{ event.category.name }}
-                </p>
+                </span>
 
-                <p class="text-sm text-gray-600 mb-1">
-                    📍 <span class="font-medium">Location:</span>
-                    {{ event.location }}
-                </p>
+                <h2 class="text-xl font-bold text-white tracking-tight leading-tight group-hover:text-[#f05555] transition-colors truncate">
+                    {{ event.name }}
+                </h2>
 
-                <p class="text-sm text-gray-600 mb-1">
-                    📅 <span class="font-medium">Date:</span>
-                    {{ event.date }} | ⏰ {{ event.time }}
-                </p>
+                <div class="flex items-center text-xs text-gray-500 gap-4">
+                    <span class="flex items-center gap-1.5">
+                        <i class="fa-solid fa-location-dot"></i> {{ event.location }}
+                    </span>
+                    <span class="flex items-center gap-1.5">
+                        <i class="fa-solid fa-users"></i> {{ event.participants.count }}
+                    </span>
+                    <p class="text-[#f05555] font-black text-lg">
+                        $42<span class="text-[10px] text-gray-500 font-normal uppercase ml-1">Starting</span>
+                    </p>
+                </div>
 
-                <p class="text-sm text-gray-600 mb-3">
-                    👥 <span class="font-medium">Participants:</span>
-                    {{ event.participants.count }}
-                </p>
-
-                <!-- Participants -->
-                <div class="text-xs text-gray-500 mb-4">
+                <p class="text-[11px] text-gray-600 italic line-clamp-1 border-t border-white/5 pt-3">
                     {% for participant in event.participants.all %}
                         {{ participant.name }}{% if not forloop.last %}, {% endif %}
                     {% empty %}
-                        No participants
+                        No participants registered yet
                     {% endfor %}
-                </div>
+                </p>
 
-                <!-- Actions -->
-                <div class="flex justify-between items-center">
+                <div class="pt-4 flex items-center justify-between">
+                    
+                    
                     <a href="{% url 'event_detail' event.id %}"
-                       class="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600">
-                        View Details
+                        class="px-4 py-2 border border-white/20 text-white text-[10px] font-black rounded-xl uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-300">
+                        Details
                     </a>
-
                     <div class="flex gap-2">
                         <a href="{% url 'event_update' event.id %}"
-                           class="px-3 py-1 text-sm bg-yellow-400 text-white rounded hover:bg-yellow-500">
+                           class="px-4 py-2 border border-white/20 text-white text-[10px] font-black rounded-xl uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-300">
                             Edit
                         </a>
 
@@ -86,16 +100,21 @@
                         </form>
                     </div>
                 </div>
+
             </div>
         </div>
         {% endfor %}
 
     </div>
     {% else %}
-        <div class="bg-white p-6 rounded-lg shadow text-center text-gray-500">
-            No events available.
+        <div class="bg-white p-16 rounded-[2.5rem] shadow-sm border border-gray-100 text-center space-y-4">
+            <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto">
+                <i class="fa-regular fa-calendar-xmark text-3xl text-gray-300"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900">No events found</h3>
+            <p class="text-gray-500 max-w-xs mx-auto text-sm">You haven't created any events yet. Click the button above to get started.</p>
         </div>
     {% endif %}
 
 </div>
-{% endblock %}
+{% endblock content %}

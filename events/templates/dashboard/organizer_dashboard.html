@@ -5,116 +5,118 @@ Organizer Dashboard
 {% block header_title %}Organizer Dashboard{% endblock %}
 
 {% block content %}
+<div class="mt-20">
+    <!-- ================= STATS GRID ================= -->
+    <div class="grid grid-cols-4 gap-6 mb-8">
 
-<!-- ================= STATS GRID ================= -->
-<div class="grid grid-cols-4 gap-6 mb-8">
+        <a href="{% url 'organizer_dashboard' %}">
+            <div class="bg-black border-gray-200 text-gray-200 p-6 rounded-xl shadow-sm">
+                <h3 class="text-gray-500 text-sm mb-2">TOTAL EVENTS</h3>
+                <p class="text-3xl font-semibold">{{ total_events }}</p>
+            </div>
+        </a>
 
-    <a href="{% url 'organizer_dashboard' %}">
-        <div class="bg-white p-6 rounded-xl shadow-sm">
-            <h3 class="text-gray-500 text-sm mb-2">TOTAL EVENTS</h3>
-            <p class="text-3xl font-semibold">{{ total_events }}</p>
+        <a href="{% url 'organizer_dashboard' %}?filter=upcoming">
+            <div class="bg-black border-gray-200 text-gray-200 p-6 rounded-xl shadow-sm">
+                <h3 class="text-gray-500 text-sm mb-2">UPCOMING EVENTS</h3>
+                <p class="text-3xl font-semibold">{{ upcoming_events }}</p>
+            </div>
+        </a>
+
+        <a href="{% url 'organizer_dashboard' %}?filter=past">
+            <div class="bg-black border-gray-200 text-gray-200 p-6 rounded-xl shadow-sm">
+                <h3 class="text-gray-500 text-sm mb-2">PAST EVENTS</h3>
+                <p class="text-3xl font-semibold">{{ past_events }}</p>
+            </div>
+        </a>
+
+        <div class="bg-black border-gray-200 text-gray-200 p-6 rounded-xl shadow-sm">
+            <h3 class="text-gray-500 text-sm mb-2">TOTAL PARTICIPANTS</h3>
+            <p class="text-3xl font-semibold">{{ total_participants }}</p>
         </div>
-    </a>
 
-    <a href="{% url 'organizer_dashboard' %}?filter=upcoming">
-        <div class="bg-white p-6 rounded-xl shadow-sm">
-            <h3 class="text-gray-500 text-sm mb-2">UPCOMING EVENTS</h3>
-            <p class="text-3xl font-semibold">{{ upcoming_events }}</p>
-        </div>
-    </a>
-
-    <a href="{% url 'organizer_dashboard' %}?filter=past">
-        <div class="bg-white p-6 rounded-xl shadow-sm">
-            <h3 class="text-gray-500 text-sm mb-2">PAST EVENTS</h3>
-            <p class="text-3xl font-semibold">{{ past_events }}</p>
-        </div>
-    </a>
-
-    <div class="bg-white p-6 rounded-xl shadow-sm">
-        <h3 class="text-gray-500 text-sm mb-2">TOTAL PARTICIPANTS</h3>
-        <p class="text-3xl font-semibold">{{ total_participants }}</p>
     </div>
 
-</div>
+    <!-- ================= TODAY'S EVENTS ================= -->
+    <div class="text-gray-200 rounded-xl shadow-sm mb-8">
+        <h3 class="p-4 font-semibold border-b">Today's Events</h3>
 
-<!-- ================= TODAY'S EVENTS ================= -->
-<div class="bg-white rounded-xl shadow-sm mb-8">
-    <h3 class="p-4 font-semibold border-b">Today's Events</h3>
-
-    {% if todays_events %}
-    {% for event in todays_events %}
-    <div class="p-4 border-b">
-        <strong>{{ event.name }}</strong>
-        <span class="text-gray-500">({{ event.time }})</span><br>
-        <span class="text-sm text-gray-600">
-            {{ event.location }} | {{ event.category.name }}
-        </span>
-    </div>
-    {% endfor %}
-    {% else %}
-    <p class="p-4 text-gray-500">No events today.</p>
-    {% endif %}
-</div>
-
-<!-- ================= INTERACTIVE EVENT LIST ================= -->
-<div class="bg-white rounded-xl shadow-sm">
-    <h3 class="p-4 font-semibold border-b">
-        {% if filter_type == 'upcoming' %}
-        Upcoming Events
-        {% elif filter_type == 'past' %}
-        Past Events
+        {% if todays_events %}
+        {% for event in todays_events %}
+        <div class="p-4 border-b">
+            <strong>{{ event.name }}</strong>
+            <span class="text-gray-500">({{ event.time }})</span><br>
+            <span class="text-sm text-gray-600">
+                {{ event.location }} | {{ event.category.name }}
+            </span>
+        </div>
+        {% endfor %}
         {% else %}
-        All Events
+        <p class="p-4 text-gray-500">No events today.</p>
         {% endif %}
-    </h3>
-    <div class="grid grid-cols-5 text-center p-4 border-gray-100 border-b text-sm text-gray-500">
-        <div>EVENT NAME</div>
-        <div>CATEGORY</div>
-        <div>PARTICIPANTS</div>
-        <div>DATE</div>
     </div>
 
-    <div class="divide-y divide-gray-100"></div>
-    {% for event in filtered_events %}
+    <!-- ================= INTERACTIVE EVENT LIST ================= -->
+    <div class=" rounded-xl shadow-sm">
+        <h3 class="p-4 font-semibold border-b">
+            {% if filter_type == 'upcoming' %}
+            Upcoming Events
+            {% elif filter_type == 'past' %}
+            Past Events
+            {% else %}
+            All Events
+            {% endif %}
+        </h3>
+        <div class="grid grid-cols-5 text-center p-4 border-gray-100 border-b text-sm text-gray-200">
+            <div>EVENT NAME</div>
+            <div>CATEGORY</div>
+            <div>PARTICIPANTS</div>
+            <div>DATE</div>
+        </div>
 
-    <div class="grid grid-cols-5 text-center p-4 gap-4 rounded-full">
-        <div class="flex items-center gap-2">
-            <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-            <span>{{event.name}}</span>
-        </div>
-        <div>
-            <span class="px-3 py-1 rounded-full bg-blue-300 text-blue-600 text-sm">{{event.category}}</span>
-        </div>
-        <div>
-            <span class="px-3 py-1 rounded-full bg-blue-300 text-blue-600 text-sm">{{event.participants.count}}
-                Participants</span>
-        </div>
-        <div>
-            <span class="px-3 py-1 rounded-full bg-blue-300 text-blue-600 text-sm">{{event.date}}</span>
-        </div>
-        <!-- Actions -->
-        <div class=" flex gap-3">
-            <!-- Edit Button -->
-            <a href="{% url 'event_update' event.id %}" class="px-4 py-1.5 text-sm font-medium rounded-md
-                  text-blue-600 border border-blue-600
-                  hover:bg-blue-600 hover:text-white
+        <div class="divide-y divide-gray-100"></div>
+        {% for event in filtered_events %}
+
+        <div class="grid grid-cols-5 text-center p-4 gap-4 rounded-full">
+            <div class="flex items-center gap-2">
+                <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span class="text-gray-200">{{event.name}}</span>
+            </div>
+            <div>
+                <span  class="px-3 py-1 rounded-full bg-gray-200 text-black text-sm">{{event.category}}</span>
+            </div>
+            <div>
+                <span  class="px-3 py-1 rounded-full bg-gray-200 text-black text-sm">{{event.participants.count}}
+                    Participants</span>
+            </div>
+            <div>
+                <span class="px-3 py-1 rounded-full bg-gray-200 text-black text-sm">{{event.date}}</span>
+            </div>
+            <!-- Actions -->
+            <div class=" flex gap-3">
+                <!-- Edit Button -->
+                <a href="{% url 'event_update' event.id %}" class="px-4 py-1.5 text-sm font-medium rounded-md
+                  text-gray-500 border border-white
+                  hover:bg-white hover:text-black
                   transition duration-200">
-                Edit
-            </a>
-            <!-- Delete Button -->
-            <form action="{% url 'event_delete' event.id %}" method="POST" onsubmit="return confirm('Are you sure?')">
-                {% csrf_token %}
-                <button type="submit" class="px-3 py-1 bg-red-500 text-white rounded">
-                    Delete
-                </button>
-            </form>
+                    Edit
+                </a>
+                <!-- Delete Button -->
+                <form action="{% url 'event_delete' event.id %}" method="POST"
+                    onsubmit="return confirm('Are you sure?')">
+                    {% csrf_token %}
+                    <button type="submit" class="px-3 py-1 bg-red-500 text-white rounded">
+                        Delete
+                    </button>
+                </form>
 
+            </div>
         </div>
     </div>
+</div>
+{% empty %}
+<p class="p-4 text-gray-500">No events found.</p>
+{% endfor %}
 
-    {% empty %}
-    <p class="p-4 text-gray-500">No events found.</p>
-    {% endfor %}
 
-
-    {% endblock content %}
+{% endblock content %}

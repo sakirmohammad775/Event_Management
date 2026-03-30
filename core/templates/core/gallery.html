@@ -1,0 +1,118 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Gallery | EVENTHUB{% endblock %}
+
+{% block content %}
+<section class="py-16 bg-black">
+    <div class="max-w-7xl mx-auto ">
+
+        <div class="relative max-w-3xl mx-auto px-6  text-center">
+            <!-- Heading -->
+            <h1 class="text-4xl text-gray-200 md:text-3xl font-bold mb-6 leading-tight">
+                Art Gallery
+            </h1>
+
+            <!-- Description -->
+            <p class="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-10">
+                Capture The Most Beautiful Moment
+            </p>
+
+
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0">
+
+            <div class="relative group overflow-hidden aspect-square cursor-pointer">
+                <img src="{% static 'images/one.jpg' %}"
+                    class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                <div
+                    class="absolute inset-0 bg-black/40 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-center p-4">
+                    <div class="absolute inset-4 border border-white/40 pointer-events-none"></div>
+                    <h3 class="text-white text-2xl font-bold mb-6">Business Event</h3>
+                    <div class="flex gap-2">
+                        <div class="w-10 h-10 bg-red-600 flex items-center justify-center text-white rounded-sm"><i
+                                class="fas fa-camera"></i></div>
+                        <div class="w-10 h-10 bg-red-600 flex items-center justify-center text-white rounded-sm"><i
+                                class="fas fa-link"></i></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative group overflow-hidden aspect-square cursor-pointer">
+                <img src="{% static 'images/two.jpg' %}"
+                    class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                <div
+                    class="absolute inset-0 bg-black/40 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-center p-4">
+                    <div class="absolute inset-4 border border-white/40 pointer-events-none"></div>
+                    <h3 class="text-white text-2xl font-bold mb-6">Tech Conference</h3>
+                    <div class="flex gap-2">
+                        <div class="w-10 h-10 bg-red-600 flex items-center justify-center text-white rounded-sm"><i
+                                class="fas fa-camera"></i></div>
+                        <div class="w-10 h-10 bg-red-600 flex items-center justify-center text-white rounded-sm"><i
+                                class="fas fa-link"></i></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative group overflow-hidden aspect-square cursor-pointer">
+                <img src="{% static 'images/three.jpg' %}"
+                    class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                <div
+                    class="absolute inset-0 bg-black/40 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-center p-4">
+                    <div class="absolute inset-4 border border-white/40 pointer-events-none"></div>
+                    <h3 class="text-white text-2xl font-bold mb-6">Food Workshop</h3>
+                    <div class="flex gap-2">
+                        <div class="w-10 h-10 bg-red-600 flex items-center justify-center text-white rounded-sm"><i
+                                class="fas fa-camera"></i></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative group overflow-hidden aspect-square cursor-pointer">
+                <img src="{% static 'images/four.jpg' %}"
+                    class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                <div
+                    class="absolute inset-0 bg-black/40 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-center p-4">
+                    <div class="absolute inset-4 border border-white/40 pointer-events-none"></div>
+                    <h3 class="text-white text-2xl font-bold mb-6">Music Fest</h3>
+                    <div class="flex gap-2">
+                        <div class="w-10 h-10 bg-red-600 flex items-center justify-center text-white rounded-sm"><i
+                                class="fas fa-link"></i></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative group overflow-hidden aspect-square cursor-pointer">
+                <img src="{% static 'images/five.jpg' %}"
+                    class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                <div
+                    class="absolute inset-0 bg-black/40 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-center p-4">
+                    <div class="absolute inset-4 border border-white/40 pointer-events-none"></div>
+                    <h3 class="text-white text-2xl font-bold mb-6">Art Gallery</h3>
+                    <div class="flex gap-2">
+                        <div class="w-10 h-10 bg-red-600 flex items-center justify-center text-white rounded-sm"><i
+                                class="fas fa-camera"></i></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative group overflow-hidden aspect-square cursor-pointer">
+                <img src="{% static 'images/six.jpg' %}"
+                    class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                <div
+                    class="absolute inset-0 bg-black/40 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-center p-4">
+                    <div class="absolute inset-4 border border-white/40 pointer-events-none"></div>
+                    <h3 class="text-white text-2xl font-bold mb-6">Networking Night</h3>
+                    <div class="flex gap-2">
+                        <div class="w-10 h-10 bg-red-600 flex items-center justify-center text-white rounded-sm"><i
+                                class="fas fa-link"></i></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}

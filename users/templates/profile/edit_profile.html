@@ -1,46 +1,74 @@
 {% extends "core/base.html" %}
+{% load static %}
+
+{% block header_title %}Settings{% endblock header_title %}
 
 {% block content %}
+<div class="max-w-3xl mx-auto mt-20">
+    <a href="{% url 'profile' %}" class="inline-flex items-center text-xs font-black uppercase tracking-widest text-gray-400 hover:text-[#f05555] transition-colors mb-6">
+        <i class="fa-solid fa-arrow-left mr-2"></i> Back to Profile
+    </a>
 
-<div class="max-w-3xl mx-auto p-6">
+    <div class="bg-black rounded-[2.5rem] p-8 md:p-12 border border-white/10 shadow-2xl relative overflow-hidden">
+        <div class="absolute -top-24 -right-24 w-64 h-64 bg-[#f05555]/10 blur-[100px] rounded-full"></div>
+        
+        <div class="relative z-10">
+            <h2 class="text-3xl font-black text-white uppercase tracking-tighter mb-8">
+                Edit Profile<span class="text-[#f05555]">.</span>
+            </h2>
 
-    <h2 class="text-2xl font-bold mb-6">Edit Profile</h2>
+            <form method="POST" enctype="multipart/form-data" class="space-y-6">
+                {% csrf_token %}
 
-    <form method="POST" enctype="multipart/form-data" class="space-y-4">
-        {% csrf_token %}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-[11px] font-black uppercase tracking-widest text-gray-400 ml-2">First Name</label>
+                        <input type="text" name="first_name" value="{{ form.first_name.value|default:'' }}" 
+                            class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:outline-none focus:border-[#f05555] focus:ring-1 focus:ring-[#f05555] transition-all text-white text-sm" placeholder="First Name">
+                    </div>
 
-        <div>
-            <label>First Name</label>
-            {{ form.first_name }}
+                    <div class="space-y-2">
+                        <label class="text-[11px] font-black uppercase tracking-widest text-gray-400 ml-2">Last Name</label>
+                        <input type="text" name="last_name" value="{{ form.last_name.value|default:'' }}" 
+                            class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:outline-none focus:border-[#f05555] focus:ring-1 focus:ring-[#f05555] transition-all text-white text-sm" placeholder="Last Name">
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[11px] font-black uppercase tracking-widest text-gray-400 ml-2">Email Address</label>
+                    <input type="email" name="email" value="{{ form.email.value|default:'' }}" 
+                        class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:outline-none focus:border-[#f05555] focus:ring-1 focus:ring-[#f05555] transition-all text-white text-sm" placeholder="Email">
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[11px] font-black uppercase tracking-widest text-gray-400 ml-2">Phone Number</label>
+                    <input type="text" name="phone_number" value="{{ form.phone_number.value|default:'' }}" 
+                        class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:outline-none focus:border-[#f05555] focus:ring-1 focus:ring-[#f05555] transition-all text-white text-sm" placeholder="Phone Number">
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[11px] font-black uppercase tracking-widest text-gray-400 ml-2">Profile Picture</label>
+                    <div class="relative w-full">
+                        <input type="file" name="profile_picture" id="profile_picture"
+                            class="hidden">
+                        <label for="profile_picture" class="flex items-center justify-between w-full bg-white/5 border border-dashed border-white/20 rounded-2xl px-6 py-4 cursor-pointer hover:border-[#f05555] hover:bg-[#f05555]/5 transition-all">
+                            <span class="text-sm text-gray-400">Choose new photo...</span>
+                            <i class="fa-solid fa-cloud-arrow-up text-[#f05555]"></i>
+                        </label>
+                        {% if request.user.profile_picture %}
+                            <p class="text-[10px] text-gray-500 mt-2 ml-2 italic">Current: {{ request.user.profile_picture.name }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="pt-6">
+                    <button type="submit"
+                        class="w-full md:w-auto px-12 py-4 bg-[#f05555] text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-white hover:text-black transition-all shadow-lg shadow-[#f05555]/20">
+                        Update Profile
+                    </button>
+                </div>
+            </form>
         </div>
-
-        <div>
-            <label>Last Name</label>
-            {{ form.last_name }}
-        </div>
-
-        <div>
-            <label>Email</label>
-            {{ form.email }}
-        </div>
-
-        <div>
-            <label>Phone Number</label>
-            {{ form.phone_number }}
-        </div>
-
-        <div>
-            <label>Profile Picture</label>
-            {{ form.profile_picture }}
-        </div>
-
-        <button type="submit"
-                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-            Update Profile
-        </button>
-
-    </form>
-
+    </div>
 </div>
-
-{% endblock %}
+{% endblock content %}
