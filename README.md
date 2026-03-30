@@ -15,6 +15,9 @@ A full-stack event management system built with Django and Tailwind CSS. Support
 | Automation | Django Signals |
 
 ---
+## Users(For testing purpose)
+- Orgnizer -> username: stone,Password: stone12345
+- Participant -> username: test,Password: test12345
 
 ## Features
 
