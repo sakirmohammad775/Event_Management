@@ -59,27 +59,94 @@ Three roles managed through Django Groups:
 ---
 
 ## Project Structure
-
 ```
 event_management/
-├── core/               # Home page, base templates, navbar
-├── events/             # Event & category models, views, signals
+│
+├── core/                            # Landing page, shared UI
+│   ├── views.py
+│   ├── urls.py
+│   └── templates/core/
+│       ├── base.html                # Master layout, role-based navbar switching
+│       ├── navbar_admin.html
+│       ├── navbar_organizer.html
+│       ├── navbar_participant.html
+│       ├── navbar_non_logged.html
+│       ├── home.html
+│       ├── card.html                # Reusable event card partial
+│       ├── footer.html
+│       └── non_permission.html
+│
+├── events/                          # Event and category management
+│   ├── models.py                    # Event, Category
+│   ├── views.py                     # All CBVs: List, Detail, Create, Update, Delete, RSVP
+│   ├── forms.py
+│   ├── urls.py
+│   ├── signals.py                   # RSVP confirmation email (m2m_changed)
 │   └── templates/
 │       ├── events/
+│       │   ├── event_list.html
+│       │   ├── event_detail.html
+│       │   ├── event_card.html      # Reusable list card partial
+│       │   ├── category_list.html
+│       │   ├── form.html            # Shared create/update form
+│       │   └── confirm_delete.html
 │       └── dashboard/
-├── users/              # Auth, profiles, admin management
+│           ├── dashboard.html            # Base dashboard layout (extended by all dashboards)
+│           ├── organizer_dashboard.html
+│           ├── admin_dashboard.html
+│           └── participant_dashboard.html
+│
+├── users/                           # Auth, profiles, RBAC
+│   ├── models.py                    # CustomUser (AbstractUser + profile_picture + phone_number)
+│   ├── views.py                     # SignUpView, SignInView, ActivateUserView, ProfileView, etc.
+│   ├── forms.py
+│   ├── urls.py
+│   ├── signals.py                   # Activation email (post_save) + RSVP email connector
+│   ├── apps.py                      # Registers both signals in ready()
 │   └── templates/
 │       ├── users/
+│       │   ├── signup.html
+│       │   └── signin.html
 │       ├── admin/
+│       │   ├── dashboard.html
+│       │   ├── assign_role.html
+│       │   ├── create_group.html
+│       │   ├── group_list.html
+│       │   └── participant_list.html
 │       └── profile/
-├── media/              # Uploaded files
-├── static/             # CSS, JS, default images
-├── populate_db.py      # Seed script
+│           ├── profile.html
+│           ├── edit_profile.html
+│           └── change_password.html
+│
+├── media/                           # Uploaded files (gitignored)
+│   ├── profile_pics/
+│   ├── events_asset/
+│   └── defaults/                    # Default images committed to repo
+│
+├── static/                          # CSS, JS, static images
+├── event_management/                # Django project config
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+│
+├── populate_db.py                   # Seeds 5 categories + 20 events
+├── requirements.txt
+├── build.sh                         # Render build script
+├── render.yaml                      # Render deployment config
+├── .env                             # Local env vars (gitignored)
 └── manage.py
 ```
-
 ---
-
+### User Journey
+1. Register → Activation email sent automatically (post_save signal)
+2. Click email link → Account activated → Redirect to Sign In
+3. Sign In → Redirected to role-specific dashboard
+4. Participant browses events → RSVPs to an event
+5. Confirmation email sent (m2m_changed signal)
+6. Event appears in Participant Dashboard with cancel option
+7. Organizer creates / manages events from Organizer Dashboard
+8. Admin assigns roles and manages users from Admin Dashboard
+---
 ## Setup
 
 ```bash
